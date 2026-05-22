@@ -81,7 +81,6 @@ export const dict = {
       reactivated: "Reactivated",
       loadingUser: "Loading user...",
       loadingUsers: "Loading users...",
-      cannotDeactivateSelf: "You cannot deactivate yourself",
       roles: {
         pick: "Pick a role",
         helper: "Helper",
@@ -93,6 +92,7 @@ export const dict = {
         failedToLoadUsers: "Failed to load users",
         failedToLoadUser: "Failed to load user",
         deactivateSelf: "You cannot deactivate yourself",
+        changeOwnRole: "You cannot change your own role",
         duplicateMinecraftUuid:
           "A user already exists with that Minecraft UUID",
       },

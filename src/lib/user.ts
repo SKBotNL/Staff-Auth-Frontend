@@ -113,6 +113,8 @@ function getApiErrorMessage(err: ApiError): string {
       return t("panel.users.error.duplicateMinecraftUuid");
     case "DEACTIVATE_SELF":
       return t("panel.users.error.deactivateSelf");
+    case "CHANGE_OWN_ROLE":
+      return t("panel.users.error.changeOwnRole");
     default:
       return t("error.unknownError");
   }

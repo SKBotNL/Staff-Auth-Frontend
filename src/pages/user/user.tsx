@@ -173,19 +173,31 @@ function User() {
               onInput={(e) => setMinecraftUuid(e.target.value)}
               required
             />
-            <label class="label">{t("panel.users.role")}</label>
-            <select
-              value={role()}
-              onChange={(e) => setRole(e.target.value as Role)}
-              class="select w-full"
-              required
+            <div
+              class="tooltip flex-1"
+              data-tip={
+                user()?.id.toString() === authUser.user()?.sub
+                  ? t("panel.users.error.changeOwnRole")
+                  : ""
+              }
             >
-              <option value="HELPER">{t("panel.users.roles.helper")}</option>
-              <option value="MODERATOR">
-                {t("panel.users.roles.moderator")}
-              </option>
-              <option value="ADMIN">{t("panel.users.roles.admin")}</option>
-            </select>
+              <label class="label">{t("panel.users.role")}</label>
+              <select
+                value={role()}
+                onChange={(e) => setRole(e.target.value as Role)}
+                class="select w-full"
+                disabled={
+                  loading() || user()?.id.toString() === authUser.user()?.sub
+                }
+                required
+              >
+                <option value="HELPER">{t("panel.users.roles.helper")}</option>
+                <option value="MODERATOR">
+                  {t("panel.users.roles.moderator")}
+                </option>
+                <option value="ADMIN">{t("panel.users.roles.admin")}</option>
+              </select>
+            </div>
             <label class="label">{t("panel.users.setUp")}</label>
             <input
               type="text"
@@ -208,7 +220,7 @@ function User() {
                 class="tooltip flex-1"
                 data-tip={
                   user()?.id.toString() === authUser.user()?.sub
-                    ? t("panel.users.cannotDeactivateSelf")
+                    ? t("panel.users.error.deactivateSelf")
                     : ""
                 }
               >
