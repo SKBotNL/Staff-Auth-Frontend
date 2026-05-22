@@ -167,12 +167,17 @@ function User() {
             <label class="label">{t("panel.users.minecraftUuid")}</label>
             <input
               type="text"
-              class="input w-full"
+              class="input validator w-full"
               placeholder={t("panel.users.minecraftUuid")}
               value={minecraftUuid()}
               onInput={(e) => setMinecraftUuid(e.target.value)}
               required
+              pattern="^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$"
+              title={t("panel.users.error.enterValidUuid")}
             />
+            <div class="validator-hint hidden">
+              {t("panel.users.error.enterValidUuid")}
+            </div>
             <div
               class="tooltip flex-1"
               data-tip={
