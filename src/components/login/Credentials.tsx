@@ -1,0 +1,86 @@
+import { createSignal } from "solid-js";
+import { t } from "../../lib/i18n";
+import { loginApi } from "../../lib/login";
+import { AppError } from "../../types/api";
+import { throwIfFatal } from "../../lib/error";
+
+export default function CredentialsComponent({
+  loginChallenge,
+  done,
+}: {
+  loginChallenge: string;
+  done: () => void;
+}) {
+  const [username, setUsername] = createSignal("");
+  const [password, setPassword] = createSignal("");
+  const [error, setError] = createSignal<string | null>(null);
+  const [fatalError, setFatalError] = createSignal<Error | null>(null);
+
+  async function submit() {
+    try {
+      await loginApi.credentials(
+        {
+          username: username(),
+          password: password(),
+        },
+        loginChallenge,
+      );
+    } catch (err) {
+      if (!(err instanceof AppError)) {
+        setFatalError(err as Error);
+        return;
+      }
+      if (err.kind === "fatal") {
+        setFatalError(err);
+        return;
+      }
+      setError(err.message);
+      return;
+    }
+    done();
+  }
+
+  return (
+    <>
+      {throwIfFatal(fatalError, () => setFatalError(null))()}
+
+      <div class="flex flex-col items-center">
+        <h1 class="text-2xl text-center font-bold">
+          {t("login.credentials.title")}
+        </h1>
+        <form
+          class="w-full"
+          onSubmit={(e) => {
+            e.preventDefault();
+            submit();
+          }}
+        >
+          <fieldset class="fieldset">
+            <label class="label">{t("login.credentials.username")}</label>
+            <input
+              type="text"
+              class="input w-full"
+              placeholder={t("login.credentials.username")}
+              value={username()}
+              onInput={(e) => setUsername(e.target.value)}
+              required
+            />
+            <label class="label">{t("login.credentials.password")}</label>
+            <input
+              type="password"
+              class="input w-full"
+              placeholder={t("login.credentials.password")}
+              value={password()}
+              onInput={(e) => setPassword(e.target.value)}
+              required
+            />
+            {error() && <p class="text-error mt-2">{error()}</p>}
+            <button type="submit" class="btn btn-primary mt-4">
+              {t("login.continue")}
+            </button>
+          </fieldset>
+        </form>
+      </div>
+    </>
+  );
+}

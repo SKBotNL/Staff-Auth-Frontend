@@ -1,0 +1,127 @@
+import { ApiError, AppError } from "../types/api";
+import { BASE_URL, isApiError } from "./api";
+import { t } from "../lib/i18n";
+import { LoginStage } from "../types/login";
+
+export const loginApi = {
+  currentStage: async (loginChallenge: string): Promise<LoginStage> => {
+    const url = new URL("/login/currentStage", BASE_URL);
+    url.searchParams.set("login_challenge", loginChallenge);
+    const response = await fetch(url);
+
+    if (!response.ok)
+      throw toAppError({
+        status: response.status,
+        message: await response.text(),
+      });
+    const stage = getStage(await response.text());
+    if (stage instanceof AppError) throw stage;
+    return stage;
+  },
+
+  credentials: async (
+    credentials: {
+      username: string;
+      password: string;
+    },
+    loginChallenge: string,
+  ) => {
+    const response = await fetch(`${BASE_URL}/login/credentials`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...credentials,
+        loginChallenge: loginChallenge,
+      }),
+    });
+
+    if (!response.ok)
+      throw toAppError({
+        status: response.status,
+        message: await response.text(),
+      });
+  },
+
+  minecraftCheck: async (loginChallenge: string): Promise<boolean> => {
+    const response = await fetch(`${BASE_URL}/login/minecraftcheck`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ loginChallenge: loginChallenge }),
+    });
+
+    if (!response.ok)
+      throw toAppError({
+        status: response.status,
+        message: await response.text(),
+      });
+    return (await response.text()) === "true";
+  },
+
+  /**
+   * @returns redirect URL
+   */
+  totp: async (code: string, loginChallenge: string): Promise<string> => {
+    const response = await fetch(`${BASE_URL}/login/totp`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code: code, loginChallenge: loginChallenge }),
+    });
+
+    if (!response.ok)
+      throw toAppError({
+        status: response.status,
+        message: await response.text(),
+      });
+    return await response.text();
+  },
+};
+
+const fatal = ["INVALID_LOGIN_CHALLENGE", "LOGIN_REQUEST_USED"];
+
+function toAppError(err: unknown): AppError {
+  if (isApiError(err)) {
+    return new AppError(
+      fatal.includes(err.message) ? "fatal" : "local",
+      getApiErrorMessage(err),
+      err.status,
+    );
+  }
+  return new AppError("fatal", "error.unknownError", null);
+}
+
+function getApiErrorMessage(err: ApiError): string {
+  if (err.status === 429) {
+    return t("error.tooManyRequests");
+  }
+  switch (err.message) {
+    case "INCORRECT_USERNAME_OR_PASSWORD":
+      return t("login.credentials.error.incorrectUsernameOrPassword");
+    case "MINECRAFT_CHECK_TIMEOUT":
+      return t("minecraftCheck.error.timeout");
+    case "MINECRAFT_CHECK_UNAVAILABLE":
+      return t("minecraftCheck.error.unavailable");
+    case "INCORRECT_TOTP_CODE":
+      return t("totp.error.invalidCode");
+    case "INVALID_LOGIN_CHALLENGE":
+      return t("login.error.invalidChallenge");
+    case "LOGIN_REQUEST_USED":
+      return t("login.error.challengeUsed");
+    default:
+      return t("error.unknownError");
+  }
+}
+
+function getStage(stage: string): LoginStage {
+  switch (stage) {
+    case "CREDENTIALS":
+      return { type: "credentials" };
+    case "MINECRAFT_CHECK":
+      return { type: "minecraftCheck" };
+    case "TOTP":
+      return { type: "totp" };
+    case "ACCEPT":
+      throw new AppError("fatal", t("login.error.challengeUsed"), null);
+    default:
+      throw new AppError("fatal", t("error.unknownError"), null);
+  }
+}
