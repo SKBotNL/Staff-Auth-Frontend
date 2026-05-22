@@ -111,6 +111,8 @@ function getApiErrorMessage(err: ApiError): string {
   switch (err.message) {
     case "DUPLICATE_MINECRAFT_UUID":
       return t("panel.users.error.duplicateMinecraftUuid");
+    case "INVALID_MINECRAFT_UUID":
+      return t("panel.users.error.invalidMinecraftUuid");
     case "DEACTIVATE_SELF":
       return t("panel.users.error.deactivateSelf");
     case "CHANGE_OWN_ROLE":

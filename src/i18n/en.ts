@@ -95,6 +95,7 @@ export const dict = {
         changeOwnRole: "You cannot change your own role",
         duplicateMinecraftUuid:
           "A user already exists with that Minecraft UUID",
+        invalidMinecraftUuid: "No user exists with that Minecraft UUID",
       },
     },
     invites: {
