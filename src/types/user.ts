@@ -1,5 +1,6 @@
 export type UserData = {
   id: number;
+  uuid: string;
   username: string;
   email?: string;
   role: Role;

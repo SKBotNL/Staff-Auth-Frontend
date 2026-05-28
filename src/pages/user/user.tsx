@@ -181,7 +181,7 @@ function User() {
             <div
               class="tooltip flex-1"
               data-tip={
-                user()?.id.toString() === authUser.user()?.sub
+                user()?.uuid.toString() === authUser.user()?.sub
                   ? t("panel.users.error.changeOwnRole")
                   : ""
               }
@@ -192,7 +192,7 @@ function User() {
                 onChange={(e) => setRole(e.target.value as Role)}
                 class="select w-full"
                 disabled={
-                  loading() || user()?.id.toString() === authUser.user()?.sub
+                  loading() || user()?.uuid.toString() === authUser.user()?.sub
                 }
                 required
               >
@@ -224,7 +224,7 @@ function User() {
               <div
                 class="tooltip flex-1"
                 data-tip={
-                  user()?.id.toString() === authUser.user()?.sub
+                  user()?.uuid.toString() === authUser.user()?.sub
                     ? t("panel.users.error.deactivateSelf")
                     : ""
                 }
@@ -237,7 +237,8 @@ function User() {
                   }}
                   class="btn btn-warning w-full"
                   disabled={
-                    loading() || user()?.id.toString() === authUser.user()?.sub
+                    loading() ||
+                    user()?.uuid.toString() === authUser.user()?.sub
                   }
                 >
                   {user()?.deactivated
