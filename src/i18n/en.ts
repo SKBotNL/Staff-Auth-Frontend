@@ -92,6 +92,7 @@ export const dict = {
         failedToLoadUsers: "Failed to load users",
         failedToLoadUser: "Failed to load user",
         deactivateSelf: "You cannot deactivate yourself",
+        deleteSelf: "You cannot delete yourself",
         changeOwnRole: "You cannot change your own role",
         duplicateMinecraftUuid:
           "A user already exists with that Minecraft UUID",

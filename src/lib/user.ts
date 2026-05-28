@@ -81,7 +81,7 @@ export const userApi = {
   /**
    * @return success
    */
-  delete: async (id: string): Promise<boolean> => {
+  delete: async (id: string) => {
     const response = await fetch(`${BASE_URL}/user/${id}`, {
       method: "DELETE",
       credentials: "include",
@@ -91,7 +91,10 @@ export const userApi = {
       if (response.status === 401) {
         window.location.href = LOGIN_URL;
       }
-      return false;
+      throw toAppError({
+        status: response.status,
+        message: await response.text(),
+      });
     }
     return true;
   },
@@ -115,6 +118,8 @@ function getApiErrorMessage(err: ApiError): string {
       return t("panel.users.error.invalidMinecraftUuid");
     case "DEACTIVATE_SELF":
       return t("panel.users.error.deactivateSelf");
+    case "DELETE_SELF":
+      return t("panel.users.error.deleteSelf");
     case "CHANGE_OWN_ROLE":
       return t("panel.users.error.changeOwnRole");
     default:

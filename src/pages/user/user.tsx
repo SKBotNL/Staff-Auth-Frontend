@@ -117,15 +117,22 @@ function User() {
     try {
       const u = user();
       if (u) {
-        const success = await userApi.delete(u.id.toString());
-        if (!success) {
-          setError(t("panel.error.couldNotDelete"));
-          return;
-        }
+        await userApi.delete(u.id.toString());
         revalidate("user");
         revalidate("users");
         navigate("/users");
       }
+    } catch (err) {
+      if (!(err instanceof AppError)) {
+        setFatalError(err as Error);
+        return;
+      }
+      if (err.kind === "fatal") {
+        setFatalError(err);
+        return;
+      }
+      setError(err.message);
+      return;
     } finally {
       setUpdating(false);
     }
@@ -246,13 +253,25 @@ function User() {
                     : t("panel.users.deactivate")}
                 </button>
               </div>
-              <button
-                onClick={deleteUser}
-                class="btn btn-error flex-1"
-                disabled={loading()}
+              <div
+                class="tooltip flex-1"
+                data-tip={
+                  user()?.uuid.toString() === authUser.user()?.sub
+                    ? t("panel.users.error.deleteSelf")
+                    : ""
+                }
               >
-                {t("panel.users.delete")}
-              </button>
+                <button
+                  onClick={deleteUser}
+                  class="btn btn-error w-full"
+                  disabled={
+                    loading() ||
+                    user()?.uuid.toString() === authUser.user()?.sub
+                  }
+                >
+                  {t("panel.users.delete")}
+                </button>
+              </div>
             </div>
           </fieldset>
         </form>
