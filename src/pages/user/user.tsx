@@ -232,7 +232,7 @@ function User() {
                 <button
                   onClick={() => {
                     const deactivated = user()?.deactivated;
-                    if (deactivated == null) return;
+                    if (deactivated === undefined) return;
                     activate(deactivated);
                   }}
                   class="btn btn-warning w-full"
