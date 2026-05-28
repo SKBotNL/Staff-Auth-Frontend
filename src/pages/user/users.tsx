@@ -24,7 +24,7 @@ function Users() {
             <th>{t("panel.users.role")}</th>
             <th>{t("panel.users.deactivated")}</th>
             <th>{t("panel.users.setUp")}</th>
-            <th></th>
+            <th>{t("panel.users.action")}</th>
           </tr>
         </thead>
         <tbody>

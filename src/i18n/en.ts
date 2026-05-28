@@ -79,6 +79,7 @@ export const dict = {
       deactivated: "Deactivated",
       reactivate: "Reactivate",
       reactivated: "Reactivated",
+      action: "Action",
       loadingUser: "Loading user...",
       loadingUsers: "Loading users...",
       roles: {
