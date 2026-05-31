@@ -145,7 +145,11 @@ function User() {
 
       <div class="flex flex-col w-full xl:w-1/2">
         <div class="flex flex-row items-center mb-4">
-          <button onClick={() => navigate(-1)} class="btn btn-ghost mr-2">
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            class="btn btn-ghost mr-2"
+          >
             <FiChevronLeft class="text-2xl" />
           </button>
           <img
@@ -163,8 +167,11 @@ function User() {
           }}
         >
           <fieldset class="fieldset">
-            <label class="label">{t("panel.users.email")}</label>
+            <label for="email" class="label">
+              {t("panel.users.email")}
+            </label>
             <input
+              id="email"
               type="text"
               class="input w-full"
               placeholder={t("panel.users.email")}
@@ -173,8 +180,11 @@ function User() {
               required
             />
 
-            <label class="label">{t("panel.users.minecraftUuid")}</label>
+            <label for="minecraftUuid" class="label">
+              {t("panel.users.minecraftUuid")}
+            </label>
             <input
+              id="minecraftUuid"
               type="text"
               class="input validator w-full"
               placeholder={t("panel.users.minecraftUuid")}
@@ -199,8 +209,11 @@ function User() {
               <RolePicker role={role} setRole={setRole} />
             </div>
 
-            <label class="label">{t("panel.users.setUp")}</label>
+            <label for="setUp" class="label">
+              {t("panel.users.setUp")}
+            </label>
             <input
+              id="setUp"
               type="text"
               class="input w-full"
               placeholder={t("panel.users.setUp")}
@@ -232,6 +245,7 @@ function User() {
                 }
               >
                 <button
+                  type="button"
                   onClick={() => {
                     const deactivated = user()?.deactivated;
                     if (deactivated === undefined) return;
@@ -257,6 +271,7 @@ function User() {
                 }
               >
                 <button
+                  type="button"
                   onClick={deleteUser}
                   class="btn btn-error w-full"
                   disabled={

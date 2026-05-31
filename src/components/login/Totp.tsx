@@ -15,7 +15,7 @@ export default function TotpComponent({
   const [fatalError, setFatalError] = createSignal<Error | null>(null);
 
   async function submit() {
-    let redirectUrl;
+    let redirectUrl: string;
     try {
       redirectUrl = await loginApi.totp(code(), rememberMe(), loginChallenge);
     } catch (err) {
@@ -30,7 +30,7 @@ export default function TotpComponent({
       setError(err.message);
       return;
     }
-    window.location.href = redirectUrl!;
+    window.location.href = redirectUrl;
   }
 
   return (
@@ -47,8 +47,11 @@ export default function TotpComponent({
           }}
         >
           <fieldset class="fieldset">
-            <label class="label">{t("totp.code")}</label>
+            <label for="code" class="label">
+              {t("totp.code")}
+            </label>
             <input
+              id="code"
               type="text"
               class="input validator w-full"
               placeholder={t("totp.code")}

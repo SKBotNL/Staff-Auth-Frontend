@@ -29,7 +29,7 @@ export const loginApi = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         ...credentials,
-        loginChallenge: loginChallenge,
+        loginChallenge,
       }),
     });
 
@@ -44,7 +44,7 @@ export const loginApi = {
     const response = await fetch(`${BASE_URL}/login/minecraftcheck`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ loginChallenge: loginChallenge }),
+      body: JSON.stringify({ loginChallenge }),
     });
 
     if (!response.ok)
@@ -67,9 +67,9 @@ export const loginApi = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        code: code,
-        rememberMe: rememberMe,
-        loginChallenge: loginChallenge,
+        code,
+        rememberMe,
+        loginChallenge,
       }),
     });
 

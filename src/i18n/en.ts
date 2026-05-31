@@ -64,6 +64,7 @@ export const dict = {
         glitchtip: "Glitchtip",
         roundcube: "Roundcube",
       },
+      icon: "icon",
     },
     tryAgain: "Try again",
     goBack: "Go back",

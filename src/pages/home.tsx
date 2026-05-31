@@ -57,7 +57,11 @@ export default function HomePage() {
             <a href={app.link} target="_blank" rel="noopener noreferrer">
               <div class="card bg-base-200 hover:bg-base-300 transition-colors border-2 border-base-300 shadow-2xl">
                 <div class="card-body flex items-center justify-center">
-                  <img class="w-44 h-44" src={app.icon}></img>
+                  <img
+                    class="w-44 h-44"
+                    src={app.icon}
+                    alt={`${app.name} ${t("panel.home.icon")}`}
+                  ></img>
                   <h2 class="card-title">{app.name}</h2>
                 </div>
               </div>

@@ -23,14 +23,14 @@ export default function LoginPage() {
     const data = loginData();
     if (!data) return;
     if (data.skip) {
-      window.location.href = data.redirectUri!;
+      window.location.href = data.redirectUri as string;
     }
   });
 
   const stage = createMemo(() => {
     const data = loginData();
     if (!data || data.skip) return;
-    const stage = getStage(data.currentStage!);
+    const stage = getStage(data.currentStage as string);
     if (stage instanceof AppError) throw stage;
     return stage;
   });

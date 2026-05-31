@@ -1,7 +1,7 @@
 import { ErrorBoundary, type JSX } from "solid-js";
 import { t } from "../lib/i18n";
 import { AppError } from "../types/api";
-import Error from "./Error";
+import ErrorComponent from "./ErrorComponent";
 
 export default function AppErrorBoundaryComponent(props: {
   children: JSX.Element;
@@ -10,7 +10,7 @@ export default function AppErrorBoundaryComponent(props: {
   return (
     <ErrorBoundary
       fallback={(e, reset) => {
-        let text;
+        let text: string;
         let canReset = true;
         if (e instanceof TypeError) {
           text = t("error.networkError");
@@ -26,7 +26,7 @@ export default function AppErrorBoundaryComponent(props: {
         }
 
         return (
-          <Error
+          <ErrorComponent
             text={text}
             fillScreen={true}
             reset={canReset ? reset : undefined}

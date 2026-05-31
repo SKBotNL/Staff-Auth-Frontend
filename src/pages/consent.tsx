@@ -26,7 +26,7 @@ export default function ConsentPage() {
 
   async function consent(consent: boolean, consentChallenge: string) {
     const redirectUrl = await consentApi.consent(consent, consentChallenge);
-    window.location.href = redirectUrl!;
+    window.location.href = redirectUrl;
   }
 
   return (
@@ -37,7 +37,7 @@ export default function ConsentPage() {
         <div class="flex min-h-screen items-center justify-center">
           <div class="card bg-base-200 border-2 border-base-300 w-full max-w-md shrink-0 shadow-2xl">
             <div class="card-body">
-              <img src="/logo.webp"></img>
+              <img src="/logo.webp" alt="TrueOG"></img>
               <div class="flex flex-col items-center gap-4">
                 <h1 class="text-2xl font-bold">{t("consent.title")}</h1>
 
@@ -50,15 +50,15 @@ export default function ConsentPage() {
                   <For each={consentData()?.scopes}>
                     {(scope) => (
                       <li>
-                        {scopeMap.has(scope)
-                          ? scopeMap.get(scope)!()
-                          : t("consent.scopes.default", { scope: scope })}
+                        {scopeMap.get(scope)?.() ??
+                          t("consent.scopes.default", { scope })}
                       </li>
                     )}
                   </For>
                 </ul>
                 <div class="w-full py-2 flex flex-col gap-2">
                   <button
+                    type="button"
                     onClick={() =>
                       consent(true, params.consent_challenge as string)
                     }
@@ -67,6 +67,7 @@ export default function ConsentPage() {
                     {t("consent.allow")}
                   </button>
                   <button
+                    type="button"
                     onClick={() =>
                       consent(false, params.consent_challenge as string)
                     }

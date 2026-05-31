@@ -72,7 +72,7 @@ export default function UsersPage() {
   const [role, setRole] = createSignal<Role>();
   const [fatalError, setFatalError] = createSignal<Error | null>(null);
 
-  let modalRef: HTMLDialogElement;
+  let modalRef!: HTMLDialogElement;
 
   async function create() {
     setError(null);
@@ -81,10 +81,10 @@ export default function UsersPage() {
     try {
       await userApi.create({
         email: email(),
-        role: role()!,
-        minecraftUuid: minecraftUuid()!,
+        role: role() as Role,
+        minecraftUuid: minecraftUuid(),
       });
-      modalRef!.close();
+      modalRef.close();
       revalidate("users");
     } catch (err) {
       if (!(err instanceof AppError)) {
@@ -109,7 +109,11 @@ export default function UsersPage() {
       <section class="p-8">
         <div class="flex justify-between">
           <h1 class="text-2xl font-bold mb-4">{t("panel.users.title")}</h1>
-          <button onClick={() => modalRef!.showModal()} class="btn btn-soft">
+          <button
+            type="button"
+            onClick={() => modalRef.showModal()}
+            class="btn btn-soft"
+          >
             <FiPlus class="text-lg" />
             {t("panel.users.createNew")}
           </button>
@@ -130,20 +134,23 @@ export default function UsersPage() {
 
       <dialog
         onTransitionEnd={(e) => {
-          if (e.propertyName === "opacity" && !modalRef!.open) {
+          if (e.propertyName === "opacity" && !modalRef.open) {
             setEmail("");
             setMinecraftUuid("");
             setRole();
             setError(null);
           }
         }}
-        ref={modalRef!}
+        ref={modalRef}
         id="create_user_modal"
         class="modal"
       >
         <div class="modal-box">
           <form method="dialog">
-            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+            <button
+              type="button"
+              class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >
               <FiX class="text-lg" />
             </button>
           </form>
@@ -156,8 +163,11 @@ export default function UsersPage() {
             }}
           >
             <fieldset class="fieldset">
-              <label class="label">{t("panel.users.email")}</label>
+              <label for="email" class="label">
+                {t("panel.users.email")}
+              </label>
               <input
+                id="email"
                 type="text"
                 class="input w-full"
                 placeholder={t("panel.users.email")}
@@ -166,8 +176,11 @@ export default function UsersPage() {
                 required
               />
 
-              <label class="label">{t("panel.users.minecraftUuid")}</label>
+              <label for="minecraftUuid" class="label">
+                {t("panel.users.minecraftUuid")}
+              </label>
               <input
+                id="minecraftUuid"
                 type="text"
                 class="input validator w-full"
                 placeholder={t("panel.users.minecraftUuid")}
@@ -196,7 +209,7 @@ export default function UsersPage() {
           </form>
         </div>
         <form method="dialog" class="modal-backdrop">
-          <button>Close</button>
+          <button type="button">Close</button>
         </form>
       </dialog>
     </>

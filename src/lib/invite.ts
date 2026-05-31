@@ -38,12 +38,12 @@ export const inviteApi = {
     return await response.json();
   },
 
-  create: async (userData: CreateInviteData): Promise<InviteData> => {
+  create: async (inviteData: CreateInviteData): Promise<InviteData> => {
     const response = await fetch(`${BASE_URL}/invite`, {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userData),
+      body: JSON.stringify(inviteData),
     });
 
     if (!response.ok) {

@@ -107,24 +107,25 @@ function App(props: ParentProps) {
                 <Show when={user()}>
                   {(u) => (
                     <li class="dropdown dropdown-top dropdown-center w-full">
-                      <div
+                      <button
+                        type="button"
                         tabindex="0"
-                        role="button"
                         class="flex flex-row items-center gap-2 max-w-full"
                       >
                         <img
                           src={u()["picture"]}
-                          alt="Picture"
+                          alt={u().name}
                           class="w-6 h-6 rounded"
                         ></img>
-                        <span class="truncate max-w-xs">{u()["name"]}</span>
-                      </div>
+                        <span class="truncate max-w-xs">{u().name}</span>
+                      </button>
                       <ul
                         tabindex="-1"
                         class="dropdown-content menu bg-base-100 rounded-box z-1 w-full p-2 shadow-sm"
                       >
                         <li>
                           <button
+                            type="button"
                             onClick={() =>
                               (window.location.href = `${BASE_URL}/logout`)
                             }

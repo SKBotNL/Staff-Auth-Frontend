@@ -28,8 +28,8 @@ export const consentApi = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        consent: consent,
-        consentChallenge: consentChallenge,
+        consent,
+        consentChallenge,
       }),
     });
 

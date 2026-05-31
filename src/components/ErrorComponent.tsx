@@ -23,12 +23,20 @@ export default function ErrorComponent({
       <div class="flex flex-row gap-2">
         <Show when={reset}>
           {(reset) => (
-            <button onClick={() => reset()()} class="btn btn-soft mt-4">
+            <button
+              type="button"
+              onClick={() => reset()()}
+              class="btn btn-soft mt-4"
+            >
               {t("panel.tryAgain")}
             </button>
           )}
         </Show>
-        <button onClick={() => navigate(-1)} class="btn btn-soft mt-4">
+        <button
+          type="button"
+          onClick={() => navigate(-1)}
+          class="btn btn-soft mt-4"
+        >
           {t("panel.goBack")}
         </button>
       </div>

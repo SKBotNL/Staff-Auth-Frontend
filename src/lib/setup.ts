@@ -28,7 +28,7 @@ export const setupApi = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         ...details,
-        token: token,
+        token,
       }),
     });
 
@@ -43,7 +43,7 @@ export const setupApi = {
     const response = await fetch(`${BASE_URL}/setup/minecraftcheck`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token: token }),
+      body: JSON.stringify({ token }),
     });
 
     if (!response.ok)
@@ -58,7 +58,7 @@ export const setupApi = {
     const response = await fetch(`${BASE_URL}/setup/totpsetup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token: token }),
+      body: JSON.stringify({ token }),
     });
 
     if (!response.ok)
@@ -73,7 +73,7 @@ export const setupApi = {
     const response = await fetch(`${BASE_URL}/setup/totpverify`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code: code, token: token }),
+      body: JSON.stringify({ code, token }),
     });
 
     if (!response.ok)

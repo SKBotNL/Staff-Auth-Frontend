@@ -30,6 +30,7 @@ function InviteRow({ invite }: { invite: InviteData }) {
             }
           >
             <button
+              type="button"
               class="btn btn-ghost"
               onClick={() => {
                 navigator.clipboard.writeText(link);
@@ -56,6 +57,7 @@ function InviteRow({ invite }: { invite: InviteData }) {
       </td>
       <th>
         <button
+          type="button"
           onClick={async () => {
             setDeleting(true);
             await inviteApi.delete(invite.id.toString());
@@ -101,7 +103,7 @@ export default function InvitesPage() {
   const [userId, setUserId] = createSignal<string>();
   const [fatalError, setFatalError] = createSignal<Error | null>(null);
 
-  let modalRef: HTMLDialogElement;
+  let modalRef!: HTMLDialogElement;
 
   async function create() {
     setError(null);
@@ -109,9 +111,9 @@ export default function InvitesPage() {
     setUpdating(true);
     try {
       await inviteApi.create({
-        invitedUserId: userId()!,
+        invitedUserId: userId() as string,
       });
-      modalRef!.close();
+      modalRef.close();
       revalidate("invites");
     } catch (err) {
       if (!(err instanceof AppError)) {
@@ -134,7 +136,11 @@ export default function InvitesPage() {
       <section class="p-8">
         <div class="flex justify-between">
           <h1 class="text-2xl font-bold mb-4">{t("panel.invites.title")}</h1>
-          <button onClick={() => modalRef!.showModal()} class="btn btn-soft">
+          <button
+            type="button"
+            onClick={() => modalRef.showModal()}
+            class="btn btn-soft"
+          >
             <FiPlus class="text-lg" />
             {t("panel.invites.createNew")}
           </button>
@@ -157,18 +163,21 @@ export default function InvitesPage() {
 
       <dialog
         onTransitionEnd={(e) => {
-          if (e.propertyName === "opacity" && !modalRef!.open) {
+          if (e.propertyName === "opacity" && !modalRef.open) {
             setUserId(undefined);
             setError(null);
           }
         }}
-        ref={modalRef!}
+        ref={modalRef}
         id="create_invite_modal"
         class="modal"
       >
         <div class="modal-box">
           <form method="dialog">
-            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+            <button
+              type="button"
+              class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >
               <FiX class="text-lg" />
             </button>
           </form>
@@ -181,8 +190,11 @@ export default function InvitesPage() {
             }}
           >
             <fieldset class="fieldset">
-              <label class="label">{t("panel.invites.user")}</label>
+              <label for="user" class="label">
+                {t("panel.invites.user")}
+              </label>
               <select
+                id="user"
                 value={userId() ?? ""}
                 onChange={(e) => setUserId(e.target.value as string)}
                 class="select w-full"
@@ -207,7 +219,7 @@ export default function InvitesPage() {
           </form>
         </div>
         <form method="dialog" class="modal-backdrop">
-          <button>Close</button>
+          <button type="button">Close</button>
         </form>
       </dialog>
     </>

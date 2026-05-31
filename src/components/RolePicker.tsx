@@ -11,8 +11,11 @@ export default function RolePickerComponent({
 }) {
   return (
     <>
-      <label class="label">{t("panel.users.role")}</label>
+      <label for="role" class="label">
+        {t("panel.users.role")}
+      </label>
       <select
+        id="role"
         value={role() ?? ""}
         onChange={(e) => setRole(e.target.value as Role)}
         class="select w-full"
