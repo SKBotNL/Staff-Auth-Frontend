@@ -2,9 +2,9 @@ import { lazy } from "solid-js";
 import type { RouteDefinition } from "@solidjs/router";
 
 import AppLayout from "./components/AppLayout";
+import BasicLayout from "./components/BasicLayout";
 import { preloadUsers } from "./pages/user/users.data";
 import { preloadUser } from "./pages/user/user.data";
-import BasicLayout from "./components/BasicLayout";
 import { preloadInvites } from "./pages/invites.data";
 
 const Login = lazy(() => import("./pages/login"));

@@ -53,8 +53,20 @@ export const dict = {
   },
   panel: {
     loading: "Loading panel...",
-    welcome: "Welcome to Staff-Auth",
+    home: {
+      applications: "Applications",
+      application: {
+        adminPanel: "Admin Panel",
+        punishmentPanel: "Punishment Panel",
+        gitea: "Gitea",
+        wekan: "Wekan",
+        filebrowser: "Filebrowser",
+        glitchtip: "Glitchtip",
+        roundcube: "Roundcube",
+      },
+    },
     tryAgain: "Try again",
+    goBack: "Go back",
     yes: "Yes",
     no: "No",
     menu: {
@@ -87,6 +99,7 @@ export const dict = {
         pick: "Pick a role",
         helper: "Helper",
         moderator: "Moderator",
+        developer: "Developer",
         admin: "Admin",
       },
       error: {
@@ -122,7 +135,6 @@ export const dict = {
       couldNotUpdate: "Could not update",
       couldNotDelete: "Could not delete",
       couldNotCreate: "Could not create",
-      unauthorized: "You are not authorized to access the panel",
     },
   },
   setup: {
@@ -157,5 +169,6 @@ export const dict = {
     unknownError: "Unknown error",
     networkError: "Network error",
     tooManyRequests: "Too many requests",
+    unauthorized: "You are not authorized to access this page",
   },
 };

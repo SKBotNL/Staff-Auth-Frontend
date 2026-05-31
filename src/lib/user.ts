@@ -96,7 +96,6 @@ export const userApi = {
         message: await response.text(),
       });
     }
-    return true;
   },
 };
 
@@ -110,6 +109,9 @@ function toAppError(err: unknown): AppError {
 function getApiErrorMessage(err: ApiError): string {
   if (err.status === 429) {
     return t("error.tooManyRequests");
+  }
+  if (err.status === 401 || err.status === 403) {
+    return t("error.unauthorized");
   }
   switch (err.message) {
     case "DUPLICATE_MINECRAFT_UUID":

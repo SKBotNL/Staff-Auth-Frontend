@@ -1,9 +1,8 @@
 import { FiPlus, FiX, FiCopy } from "solid-icons/fi";
-import { A, createAsync, revalidate } from "@solidjs/router";
+import { createAsync, revalidate } from "@solidjs/router";
 import { getInvites } from "./invites.data";
-import { createSignal, ErrorBoundary, For, Suspense } from "solid-js";
+import { createSignal, For, Suspense } from "solid-js";
 import { t } from "../lib/i18n";
-import Error from "../components/Error";
 import Loader from "../components/Loader";
 import { inviteApi } from "../lib/invite";
 import { AppError } from "../types/api";
@@ -11,6 +10,7 @@ import { getUsers } from "./user/users.data";
 import { userApi } from "../lib/user";
 import { InviteData } from "../types/invite";
 import { throwIfFatal } from "../lib/error";
+import AppErrorBoundary from "../components/AppErrorBoundary";
 
 function InviteRow({ invite }: { invite: InviteData }) {
   const user = createAsync(() => userApi.get(invite.invitedUserId));
@@ -131,8 +131,6 @@ export default function InvitesPage() {
 
   return (
     <>
-      {throwIfFatal(fatalError, () => setFatalError(null))()}
-
       <section class="p-8">
         <div class="flex justify-between">
           <h1 class="text-2xl font-bold mb-4">{t("panel.invites.title")}</h1>
@@ -142,23 +140,19 @@ export default function InvitesPage() {
           </button>
         </div>
 
-        <ErrorBoundary
-          fallback={(_, reset) => (
-            <Error
-              text={t("panel.invites.error.failedToLoad")}
-              fillScreen={true}
-              reset={reset}
-            />
-          )}
-        >
-          <Suspense
-            fallback={
-              <Loader text={t("panel.invites.loading")} fillScreen={true} />
-            }
-          >
-            <Invites />
-          </Suspense>
-        </ErrorBoundary>
+        <AppErrorBoundary fallbackError={t("panel.invites.error.failedToLoad")}>
+          <>
+            {throwIfFatal(fatalError, () => setFatalError(null))()}
+
+            <Suspense
+              fallback={
+                <Loader text={t("panel.invites.loading")} fillScreen={true} />
+              }
+            >
+              <Invites />
+            </Suspense>
+          </>
+        </AppErrorBoundary>
       </section>
 
       <dialog

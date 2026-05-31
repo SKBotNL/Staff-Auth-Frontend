@@ -1,14 +1,15 @@
-import { FiPlus, FiX } from "solid-icons/fi";
 import { A, createAsync, revalidate } from "@solidjs/router";
-import { getUsers } from "./users.data";
-import { createSignal, ErrorBoundary, For, Suspense } from "solid-js";
-import { t } from "../../lib/i18n";
-import Error from "../../components/Error";
+import { FiPlus, FiX } from "solid-icons/fi";
+import { createSignal, For, Suspense } from "solid-js";
+import AppErrorBoundary from "../../components/AppErrorBoundary";
 import Loader from "../../components/Loader";
-import { Role } from "../../types/user";
+import RolePicker from "../../components/RolePicker";
+import { throwIfFatal } from "../../lib/error";
+import { t } from "../../lib/i18n";
 import { userApi } from "../../lib/user";
 import { AppError } from "../../types/api";
-import { throwIfFatal } from "../../lib/error";
+import { Role } from "../../types/user";
+import { getUsers } from "./users.data";
 
 function Users() {
   const users = createAsync(() => getUsers());
@@ -114,14 +115,8 @@ export default function UsersPage() {
           </button>
         </div>
 
-        <ErrorBoundary
-          fallback={(_, reset) => (
-            <Error
-              text={t("panel.users.error.failedToLoadUsers")}
-              fillScreen={true}
-              reset={reset}
-            />
-          )}
+        <AppErrorBoundary
+          fallbackError={t("panel.users.error.failedToLoadUsers")}
         >
           <Suspense
             fallback={
@@ -130,7 +125,7 @@ export default function UsersPage() {
           >
             <Users />
           </Suspense>
-        </ErrorBoundary>
+        </AppErrorBoundary>
       </section>
 
       <dialog
@@ -170,6 +165,7 @@ export default function UsersPage() {
                 onInput={(e) => setEmail(e.target.value)}
                 required
               />
+
               <label class="label">{t("panel.users.minecraftUuid")}</label>
               <input
                 type="text"
@@ -188,6 +184,7 @@ export default function UsersPage() {
               <RolePicker role={role} setRole={setRole} />
 
               {error() && <p class="text-error mt-2">{error()}</p>}
+
               <button
                 type="submit"
                 class="btn btn-primary flex-1 mt-2"

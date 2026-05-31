@@ -5,16 +5,17 @@ import {
   useNavigate,
   useParams,
 } from "@solidjs/router";
-import { createEffect, createSignal, ErrorBoundary, Suspense } from "solid-js";
+import { createEffect, createSignal, Suspense } from "solid-js";
 import { getUser } from "./user.data";
 import { t } from "../../lib/i18n";
 import { userApi } from "../../lib/user";
 import { Role } from "../../types/user";
 import Loader from "../../components/Loader";
-import Error from "../../components/Error";
 import { AppError } from "../../types/api";
 import { throwIfFatal } from "../../lib/error";
 import { useUser } from "../../store/auth";
+import AppErrorBoundary from "../../components/AppErrorBoundary";
+import RolePicker from "../../components/RolePicker";
 
 function User() {
   const authUser = useUser();
@@ -171,6 +172,7 @@ function User() {
               onInput={(e) => setEmail(e.target.value)}
               required
             />
+
             <label class="label">{t("panel.users.minecraftUuid")}</label>
             <input
               type="text"
@@ -185,6 +187,7 @@ function User() {
             <div class="validator-hint hidden">
               {t("panel.users.error.enterValidUuid")}
             </div>
+
             <div
               class="tooltip flex-1"
               data-tip={
@@ -195,6 +198,7 @@ function User() {
             >
               <RolePicker role={role} setRole={setRole} />
             </div>
+
             <label class="label">{t("panel.users.setUp")}</label>
             <input
               type="text"
@@ -203,13 +207,19 @@ function User() {
               value={user()?.setUp ? "Yes" : "No"}
               disabled
             />
+
             {success() && <p class="text-success mt-2">{success()}</p>}
             {error() && <p class="text-error mt-2">{error()}</p>}
+
             <div class="flex flex-col sm:flex-row mt-4 gap-2 h-22">
               <button
                 type="submit"
                 class="btn btn-primary flex-1"
-                disabled={loading()}
+                disabled={
+                  loading() ||
+                  (user()?.email === email() &&
+                    user()?.minecraftUuid === minecraftUuid())
+                }
               >
                 {t("panel.users.update")}
               </button>
@@ -268,15 +278,7 @@ function User() {
 export default function UserPage() {
   return (
     <section class="p-8">
-      <ErrorBoundary
-        fallback={(_, reset) => (
-          <Error
-            text={t("panel.users.error.failedToLoadUser")}
-            fillScreen={true}
-            reset={reset}
-          />
-        )}
-      >
+      <AppErrorBoundary fallbackError={t("panel.users.error.failedToLoadUser")}>
         <Suspense
           fallback={
             <Loader text={t("panel.users.loadingUser")} fillScreen={true} />
@@ -284,7 +286,7 @@ export default function UserPage() {
         >
           <User />
         </Suspense>
-      </ErrorBoundary>
+      </AppErrorBoundary>
     </section>
   );
 }

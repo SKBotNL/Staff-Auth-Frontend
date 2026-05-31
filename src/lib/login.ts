@@ -1,7 +1,7 @@
 import { ApiError, AppError } from "../types/api";
 import { BASE_URL, isApiError } from "./api";
 import { t } from "../lib/i18n";
-import { LoginStage } from "../types/login";
+import { LoginData, LoginStage } from "../types/login";
 
 export const loginApi = {
   loginData: async (loginChallenge: string): Promise<LoginData> => {
