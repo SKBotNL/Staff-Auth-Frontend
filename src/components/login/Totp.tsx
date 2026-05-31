@@ -10,13 +10,14 @@ export default function TotpComponent({
   loginChallenge: string;
 }) {
   const [code, setCode] = createSignal("");
+  const [rememberMe, setRememberMe] = createSignal(false);
   const [error, setError] = createSignal<string | null>(null);
   const [fatalError, setFatalError] = createSignal<Error | null>(null);
 
   async function submit() {
     let redirectUrl;
     try {
-      redirectUrl = await loginApi.totp(code(), loginChallenge);
+      redirectUrl = await loginApi.totp(code(), rememberMe(), loginChallenge);
     } catch (err) {
       if (!(err instanceof AppError)) {
         setFatalError(err as Error);
@@ -60,6 +61,15 @@ export default function TotpComponent({
             <div class="validator-hint hidden">
               {t("totp.error.enterValidCode")}
             </div>
+            <label class="label">
+              <input
+                type="checkbox"
+                checked={rememberMe()}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                class="toggle"
+              />
+              {t("login.rememberMe")}
+            </label>
             {error() && <p class="text-error mt-2">{error()}</p>}
             <button type="submit" class="btn btn-primary mt-4">
               {t("login.continue")}

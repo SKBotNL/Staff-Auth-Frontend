@@ -4,8 +4,8 @@ import { t } from "../lib/i18n";
 import { LoginStage } from "../types/login";
 
 export const loginApi = {
-  currentStage: async (loginChallenge: string): Promise<LoginStage> => {
-    const url = new URL("/login/currentStage", BASE_URL);
+  loginData: async (loginChallenge: string): Promise<LoginData> => {
+    const url = new URL("/login/data", BASE_URL);
     url.searchParams.set("login_challenge", loginChallenge);
     const response = await fetch(url);
 
@@ -14,9 +14,7 @@ export const loginApi = {
         status: response.status,
         message: await response.text(),
       });
-    const stage = getStage(await response.text());
-    if (stage instanceof AppError) throw stage;
-    return stage;
+    return await response.json();
   },
 
   credentials: async (
@@ -60,11 +58,19 @@ export const loginApi = {
   /**
    * @returns redirect URL
    */
-  totp: async (code: string, loginChallenge: string): Promise<string> => {
+  totp: async (
+    code: string,
+    rememberMe: boolean,
+    loginChallenge: string,
+  ): Promise<string> => {
     const response = await fetch(`${BASE_URL}/login/totp`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code: code, loginChallenge: loginChallenge }),
+      body: JSON.stringify({
+        code: code,
+        rememberMe: rememberMe,
+        loginChallenge: loginChallenge,
+      }),
     });
 
     if (!response.ok)
@@ -111,7 +117,7 @@ function getApiErrorMessage(err: ApiError): string {
   }
 }
 
-function getStage(stage: string): LoginStage {
+export function getStage(stage: string): LoginStage {
   switch (stage) {
     case "CREDENTIALS":
       return { type: "credentials" };

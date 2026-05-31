@@ -10,6 +10,7 @@ export const dict = {
         incorrectUsernameOrPassword: "Incorrect username or password",
       },
     },
+    rememberMe: "Remember me",
     error: {
       noChallenge: "No login challenge was provided",
       invalidChallenge: "An invalid login challenge was provided",
