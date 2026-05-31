@@ -1,21 +1,21 @@
-import { FiMenu, FiHome, FiUsers, FiUserPlus, FiLogOut } from "solid-icons/fi";
+import { A } from "@solidjs/router";
+import type { IconTypes } from "solid-icons";
+import { FiHome, FiLogOut, FiMenu, FiUserPlus, FiUsers } from "solid-icons/fi";
 import {
   createEffect,
   createMemo,
   createSignal,
   For,
-  ParentProps,
+  type ParentProps,
   Show,
   Suspense,
 } from "solid-js";
-import { A } from "@solidjs/router";
 import { BASE_URL } from "../lib/api";
-import { useUser } from "../store/auth";
-import { dict, t } from "../lib/i18n";
-import Loader from "./Loader";
 import { throwIfFatal } from "../lib/error";
+import { dict, t } from "../lib/i18n";
+import { useUser } from "../store/auth";
 import AppErrorBoundary from "./AppErrorBoundary";
-import { IconTypes } from "solid-icons";
+import Loader from "./Loader";
 
 function App(props: ParentProps) {
   const { user, error } = useUser();

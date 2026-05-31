@@ -1,7 +1,7 @@
-import { ApiError, AppError } from "../types/api";
-import { ConsentData } from "../types/consent";
-import { BASE_URL, isApiError } from "./api";
 import { t } from "../lib/i18n";
+import { type ApiError, AppError } from "../types/api";
+import type { ConsentData } from "../types/consent";
+import { BASE_URL, isApiError } from "./api";
 
 export const consentApi = {
   consentData: async (consentChallenge: string): Promise<ConsentData> => {

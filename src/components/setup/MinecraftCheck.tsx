@@ -1,8 +1,8 @@
 import { createSignal, onMount } from "solid-js";
+import { throwIfFatal } from "../../lib/error";
 import { t } from "../../lib/i18n";
 import { setupApi } from "../../lib/setup";
 import { AppError } from "../../types/api";
-import { throwIfFatal } from "../../lib/error";
 
 export default function MinecraftCheckComponent({
   token,

@@ -1,7 +1,7 @@
-import { FiXCircle } from "solid-icons/fi";
-import { t } from "../lib/i18n";
-import { Show } from "solid-js";
 import { useNavigate } from "@solidjs/router";
+import { FiXCircle } from "solid-icons/fi";
+import { Show } from "solid-js";
+import { t } from "../lib/i18n";
 
 export default function ErrorComponent({
   text,

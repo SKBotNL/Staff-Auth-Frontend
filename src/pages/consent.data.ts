@@ -1,7 +1,7 @@
 import { query } from "@solidjs/router";
-import { AppError } from "../types/api";
-import { t } from "../lib/i18n";
 import { consentApi } from "../lib/consent";
+import { t } from "../lib/i18n";
+import { AppError } from "../types/api";
 
 export const getConsentData = query(
   async (consentChallenge: string | string[] | undefined) => {

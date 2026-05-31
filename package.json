@@ -11,6 +11,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@biomejs/biome": "^2.4.16",
     "@tailwindcss/postcss": "^4.1.13",
     "baseline-browser-mapping": "^2.10.29",
     "daisyui": "^5.5.19",

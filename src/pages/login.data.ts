@@ -1,7 +1,7 @@
 import { query } from "@solidjs/router";
-import { AppError } from "../types/api";
-import { loginApi } from "../lib/login";
 import { t } from "../lib/i18n";
+import { loginApi } from "../lib/login";
+import { AppError } from "../types/api";
 
 export const getLoginData = query(
   async (loginChallenge: string | string[] | undefined) => {

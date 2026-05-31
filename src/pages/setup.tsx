@@ -1,11 +1,11 @@
-import { Match, Suspense, Switch } from "solid-js";
 import { createAsync, revalidate, useSearchParams } from "@solidjs/router";
-import { t } from "../lib/i18n";
+import { Match, Suspense, Switch } from "solid-js";
 import Loader from "../components/Loader";
-import { getSetupStage } from "./setup.data";
 import Details from "../components/setup/Details";
 import MinecraftCheck from "../components/setup/MinecraftCheck";
 import TotpSetup from "../components/setup/TotpSetup";
+import { t } from "../lib/i18n";
+import { getSetupStage } from "./setup.data";
 
 export default function SetupPage() {
   const [params] = useSearchParams();

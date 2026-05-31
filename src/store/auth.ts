@@ -1,6 +1,6 @@
 import { createSignal } from "solid-js";
 import { api } from "../lib/api";
-import { AppError, MeData } from "../types/api";
+import { AppError, type MeData } from "../types/api";
 
 const [user, setUser] = createSignal<MeData | null>(null);
 const [error, setError] = createSignal<Error | null>(null);

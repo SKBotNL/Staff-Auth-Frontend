@@ -1,4 +1,4 @@
-import Credentials from "../components/login/Credentials";
+import { createAsync, revalidate, useSearchParams } from "@solidjs/router";
 import {
   createEffect,
   createMemo,
@@ -7,14 +7,14 @@ import {
   Suspense,
   Switch,
 } from "solid-js";
-import { createAsync, revalidate, useSearchParams } from "@solidjs/router";
+import Loader from "../components/Loader";
+import Credentials from "../components/login/Credentials";
 import MinecraftCheck from "../components/login/MinecraftCheck";
 import Totp from "../components/login/Totp";
 import { t } from "../lib/i18n";
-import { getLoginData } from "./login.data";
-import Loader from "../components/Loader";
 import { getStage } from "../lib/login";
 import { AppError } from "../types/api";
+import { getLoginData } from "./login.data";
 
 export default function LoginPage() {
   const [params] = useSearchParams();

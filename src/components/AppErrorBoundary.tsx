@@ -1,6 +1,6 @@
-import { JSX, ErrorBoundary } from "solid-js";
-import { AppError } from "../types/api";
+import { ErrorBoundary, type JSX } from "solid-js";
 import { t } from "../lib/i18n";
+import { AppError } from "../types/api";
 import Error from "./Error";
 
 export default function AppErrorBoundaryComponent(props: {

@@ -1,8 +1,8 @@
 import { createSignal } from "solid-js";
+import { throwIfFatal } from "../../lib/error";
 import { t } from "../../lib/i18n";
 import { loginApi } from "../../lib/login";
 import { AppError } from "../../types/api";
-import { throwIfFatal } from "../../lib/error";
 
 export default function TotpComponent({
   loginChallenge,

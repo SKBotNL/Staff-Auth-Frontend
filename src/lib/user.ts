@@ -1,7 +1,7 @@
-import { ApiError, AppError } from "../types/api";
-import { CreateUserData, UpdateUserData, UserData } from "../types/user";
-import { BASE_URL, isApiError, LOGIN_URL } from "./api";
 import { t } from "../lib/i18n";
+import { type ApiError, AppError } from "../types/api";
+import type { CreateUserData, UpdateUserData, UserData } from "../types/user";
+import { BASE_URL, isApiError, LOGIN_URL } from "./api";
 
 export const userApi = {
   getAll: async (): Promise<UserData[]> => {

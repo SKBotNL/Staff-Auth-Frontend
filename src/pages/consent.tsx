@@ -1,9 +1,9 @@
-import { createEffect, For, Show, Suspense } from "solid-js";
-import { t } from "../lib/i18n";
 import { createAsync, useSearchParams } from "@solidjs/router";
-import { consentApi } from "../lib/consent";
-import { getConsentData } from "./consent.data";
+import { createEffect, For, Show, Suspense } from "solid-js";
 import Loader from "../components/Loader";
+import { consentApi } from "../lib/consent";
+import { t } from "../lib/i18n";
+import { getConsentData } from "./consent.data";
 
 const scopeMap = new Map<string, () => string>([
   ["email", () => t("consent.scopes.emailRead")],

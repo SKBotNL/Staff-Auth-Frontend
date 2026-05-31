@@ -8,7 +8,7 @@ import { throwIfFatal } from "../../lib/error";
 import { t } from "../../lib/i18n";
 import { userApi } from "../../lib/user";
 import { AppError } from "../../types/api";
-import { Role } from "../../types/user";
+import type { Role } from "../../types/user";
 import { getUsers } from "./users.data";
 
 function Users() {

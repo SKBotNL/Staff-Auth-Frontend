@@ -1,6 +1,6 @@
-import { createSignal } from "solid-js";
-import { createAsync } from "@solidjs/router";
 import * as i18n from "@solid-primitives/i18n";
+import { createAsync } from "@solidjs/router";
+import { createSignal } from "solid-js";
 
 /*
 Assuming the dictionaries are in the following structure:

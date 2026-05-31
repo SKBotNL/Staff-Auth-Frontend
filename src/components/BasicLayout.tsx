@@ -1,4 +1,4 @@
-import { ParentProps, Show } from "solid-js";
+import { type ParentProps, Show } from "solid-js";
 import { dict, t } from "../lib/i18n";
 import AppErrorBoundary from "./AppErrorBoundary";
 

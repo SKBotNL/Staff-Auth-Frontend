@@ -1,7 +1,7 @@
-import { ApiError, AppError } from "../types/api";
-import { CreateInviteData, InviteData } from "../types/invite";
-import { BASE_URL, isApiError, LOGIN_URL } from "./api";
 import { t } from "../lib/i18n";
+import { type ApiError, AppError } from "../types/api";
+import type { CreateInviteData, InviteData } from "../types/invite";
+import { BASE_URL, isApiError, LOGIN_URL } from "./api";
 
 export const inviteApi = {
   getAll: async (): Promise<InviteData[]> => {

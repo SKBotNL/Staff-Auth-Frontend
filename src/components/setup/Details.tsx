@@ -1,8 +1,8 @@
 import { createSignal } from "solid-js";
-import { t } from "../../lib/i18n";
-import { AppError } from "../../types/api";
-import { setupApi } from "../../lib/setup";
 import { throwIfFatal } from "../../lib/error";
+import { t } from "../../lib/i18n";
+import { setupApi } from "../../lib/setup";
+import { AppError } from "../../types/api";
 
 export default function DetailsComponent({
   token,

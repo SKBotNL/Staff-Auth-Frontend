@@ -1,7 +1,7 @@
 import { query } from "@solidjs/router";
-import { AppError } from "../types/api";
-import { setupApi } from "../lib/setup";
 import { t } from "../lib/i18n";
+import { setupApi } from "../lib/setup";
+import { AppError } from "../types/api";
 
 export const getSetupStage = query(
   async (token: string | string[] | undefined) => {

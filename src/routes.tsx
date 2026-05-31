@@ -1,11 +1,11 @@
-import { lazy } from "solid-js";
 import type { RouteDefinition } from "@solidjs/router";
+import { lazy } from "solid-js";
 
 import AppLayout from "./components/AppLayout";
 import BasicLayout from "./components/BasicLayout";
-import { preloadUsers } from "./pages/user/users.data";
-import { preloadUser } from "./pages/user/user.data";
 import { preloadInvites } from "./pages/invites.data";
+import { preloadUser } from "./pages/user/user.data";
+import { preloadUsers } from "./pages/user/users.data";
 
 const Login = lazy(() => import("./pages/login"));
 const Consent = lazy(() => import("./pages/consent"));

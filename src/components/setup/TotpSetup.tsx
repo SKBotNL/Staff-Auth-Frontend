@@ -1,10 +1,10 @@
 import { createAsync, useNavigate } from "@solidjs/router";
+import { createSignal, Suspense } from "solid-js";
+import { throwIfFatal } from "../../lib/error";
 import { t } from "../../lib/i18n";
 import { setupApi } from "../../lib/setup";
-import { createSignal, Suspense } from "solid-js";
-import Loader from "../Loader";
 import { AppError } from "../../types/api";
-import { throwIfFatal } from "../../lib/error";
+import Loader from "../Loader";
 
 function TotpSetup({ token }: { token: string }) {
   const navigate = useNavigate();

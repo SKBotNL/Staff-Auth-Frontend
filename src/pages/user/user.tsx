@@ -1,21 +1,21 @@
-import { FiChevronLeft } from "solid-icons/fi";
 import {
   createAsync,
   revalidate,
   useNavigate,
   useParams,
 } from "@solidjs/router";
+import { FiChevronLeft } from "solid-icons/fi";
 import { createEffect, createSignal, Suspense } from "solid-js";
-import { getUser } from "./user.data";
+import AppErrorBoundary from "../../components/AppErrorBoundary";
+import Loader from "../../components/Loader";
+import RolePicker from "../../components/RolePicker";
+import { throwIfFatal } from "../../lib/error";
 import { t } from "../../lib/i18n";
 import { userApi } from "../../lib/user";
-import { Role } from "../../types/user";
-import Loader from "../../components/Loader";
-import { AppError } from "../../types/api";
-import { throwIfFatal } from "../../lib/error";
 import { useUser } from "../../store/auth";
-import AppErrorBoundary from "../../components/AppErrorBoundary";
-import RolePicker from "../../components/RolePicker";
+import { AppError } from "../../types/api";
+import type { Role } from "../../types/user";
+import { getUser } from "./user.data";
 
 function User() {
   const authUser = useUser();

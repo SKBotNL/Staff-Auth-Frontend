@@ -1,7 +1,7 @@
-import { ApiError, AppError } from "../types/api";
-import { BASE_URL, isApiError } from "./api";
 import { t } from "../lib/i18n";
-import { SetupStage, TotpData } from "../types/setup";
+import { type ApiError, AppError } from "../types/api";
+import type { SetupStage, TotpData } from "../types/setup";
+import { BASE_URL, isApiError } from "./api";
 
 export const setupApi = {
   currentStage: async (token: string): Promise<SetupStage> => {
