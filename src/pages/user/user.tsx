@@ -193,22 +193,7 @@ function User() {
                   : ""
               }
             >
-              <label class="label">{t("panel.users.role")}</label>
-              <select
-                value={role()}
-                onChange={(e) => setRole(e.target.value as Role)}
-                class="select w-full"
-                disabled={
-                  loading() || user()?.uuid.toString() === authUser.user()?.sub
-                }
-                required
-              >
-                <option value="HELPER">{t("panel.users.roles.helper")}</option>
-                <option value="MODERATOR">
-                  {t("panel.users.roles.moderator")}
-                </option>
-                <option value="ADMIN">{t("panel.users.roles.admin")}</option>
-              </select>
+              <RolePicker role={role} setRole={setRole} />
             </div>
             <label class="label">{t("panel.users.setUp")}</label>
             <input

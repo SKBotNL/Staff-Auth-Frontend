@@ -23,4 +23,4 @@ export type CreateUserData = {
   minecraftUuid: string;
 };
 
-export type Role = "ADMIN" | "MODERATOR" | "HELPER";
+export type Role = "ADMIN" | "DEVELOPER" | "MODERATOR" | "HELPER";
