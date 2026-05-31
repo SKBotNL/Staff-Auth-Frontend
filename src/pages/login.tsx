@@ -36,35 +36,41 @@ export default function LoginPage() {
   });
 
   return (
-    <Show when={stage()}>
-      <div class="flex min-h-screen items-center justify-center p-4">
-        <div class="card bg-base-200 border-2 border-base-300 w-full max-w-md shrink-0 shadow-2xl">
-          <div class="card-body">
-            <img src="/logo.webp" alt="TrueOG logo"></img>
-            <Suspense
-              fallback={<Loader text={t("login.loading")} fillScreen={false} />}
-            >
-              <Switch>
-                <Match when={stage()?.type === "credentials"}>
-                  <Credentials
-                    loginChallenge={params.login_challenge as string}
-                    done={() => revalidate("loginData")}
-                  />
-                </Match>
-                <Match when={stage()?.type === "minecraftCheck"}>
-                  <MinecraftCheck
-                    loginChallenge={params.login_challenge as string}
-                    done={() => revalidate("loginData")}
-                  />
-                </Match>
-                <Match when={stage()?.type === "totp"}>
-                  <Totp loginChallenge={params.login_challenge as string} />
-                </Match>
-              </Switch>
-            </Suspense>
+    <Suspense
+      fallback={<Loader text={t("login.loading")} fillScreen={false} />}
+    >
+      <Show when={stage()}>
+        <div class="flex min-h-screen items-center justify-center p-4">
+          <div class="card bg-base-200 border-2 border-base-300 w-full max-w-md shrink-0 shadow-2xl">
+            <div class="card-body">
+              <img src="/logo.webp" alt="TrueOG logo"></img>
+              <Suspense
+                fallback={
+                  <Loader text={t("login.loading")} fillScreen={false} />
+                }
+              >
+                <Switch>
+                  <Match when={stage()?.type === "credentials"}>
+                    <Credentials
+                      loginChallenge={params.login_challenge as string}
+                      done={() => revalidate("loginData")}
+                    />
+                  </Match>
+                  <Match when={stage()?.type === "minecraftCheck"}>
+                    <MinecraftCheck
+                      loginChallenge={params.login_challenge as string}
+                      done={() => revalidate("loginData")}
+                    />
+                  </Match>
+                  <Match when={stage()?.type === "totp"}>
+                    <Totp loginChallenge={params.login_challenge as string} />
+                  </Match>
+                </Switch>
+              </Suspense>
+            </div>
           </div>
         </div>
-      </div>
-    </Show>
+      </Show>
+    </Suspense>
   );
 }
