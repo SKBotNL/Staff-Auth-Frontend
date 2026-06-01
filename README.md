@@ -2,7 +2,7 @@
 The Solid.JS frontend for [Staff-Auth](https://github.com/true-og/Staff-Auth).
 
 ## Building
-1. `pnpn install`
+1. `pnpm install`
 2. `pnpm build`
 
 ## Serve
