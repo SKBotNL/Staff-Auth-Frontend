@@ -21,7 +21,7 @@ function User() {
   const authUser = useUser();
   const params = useParams();
   const navigate = useNavigate();
-  const user = createAsync(() => getUser(params.id));
+  const user = createAsync(() => getUser(params.id as string));
   const [loading, setUpdating] = createSignal(false);
   const [success, setSuccess] = createSignal<string | null>(null);
   const [error, setError] = createSignal<string | null>(null);
