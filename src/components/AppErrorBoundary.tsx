@@ -1,12 +1,11 @@
-import { ErrorBoundary, type JSX } from "solid-js";
+import { ErrorBoundary, type ParentProps } from "solid-js";
 import { t } from "../lib/i18n";
 import { AppError } from "../types/api";
 import ErrorComponent from "./ErrorComponent";
 
-export default function AppErrorBoundaryComponent(props: {
-  children: JSX.Element;
-  fallbackError: string;
-}) {
+export default function AppErrorBoundaryComponent(
+  props: ParentProps<{ fallbackError: string }>,
+) {
   return (
     <ErrorBoundary
       fallback={(e, reset) => {

@@ -147,6 +147,7 @@ export default function InvitesPage() {
         </div>
 
         <AppErrorBoundary fallbackError={t("panel.invites.error.failedToLoad")}>
+          {/* biome-ignore lint/complexity/noUselessFragments: fragment needs to exist for throwIfFatal */}
           <>
             {throwIfFatal(fatalError, () => setFatalError(null))()}
 

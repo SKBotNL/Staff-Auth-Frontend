@@ -58,8 +58,11 @@ function TotpSetup({ token }: { token: string }) {
         }}
       >
         <fieldset class="fieldset">
-          <label class="label">{t("totp.code")}</label>
+          <label for="code" class="label">
+            {t("totp.code")}
+          </label>
           <input
+            id="code"
             type="text"
             class="input validator w-full"
             placeholder={t("totp.code")}
@@ -82,13 +85,7 @@ function TotpSetup({ token }: { token: string }) {
   );
 }
 
-export default function TotpSetupComponent({
-  token,
-  done,
-}: {
-  token: string;
-  done: () => void;
-}) {
+export default function TotpSetupComponent({ token }: { token: string }) {
   return (
     <Suspense
       fallback={

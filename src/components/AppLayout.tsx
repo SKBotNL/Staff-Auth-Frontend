@@ -113,7 +113,7 @@ function App(props: ParentProps) {
                         class="flex flex-row items-center gap-2 max-w-full"
                       >
                         <img
-                          src={u()["picture"]}
+                          src={u().picture}
                           alt={u().name}
                           class="w-6 h-6 rounded"
                         ></img>

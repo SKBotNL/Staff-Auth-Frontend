@@ -50,8 +50,11 @@ export default function DetailsComponent({
           }}
         >
           <fieldset class="fieldset">
-            <label class="label">{t("setup.details.email")}</label>
+            <label for="email" class="label">
+              {t("setup.details.email")}
+            </label>
             <input
+              id="email"
               type="email"
               class="input w-full"
               placeholder={t("setup.details.email")}
@@ -59,8 +62,11 @@ export default function DetailsComponent({
               onInput={(e) => setEmail(e.target.value)}
               required
             />
-            <label class="label">{t("setup.details.password")}</label>
+            <label for="password" class="label">
+              {t("setup.details.password")}
+            </label>
             <input
+              id="password"
               type="password"
               class="input w-full"
               placeholder={t("setup.details.password")}

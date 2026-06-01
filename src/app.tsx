@@ -2,11 +2,9 @@ import { type Component, type JSX, Suspense } from "solid-js";
 
 const App: Component<{ children: JSX.Element }> = (props) => {
   return (
-    <>
-      <main class="flex-1">
-        <Suspense>{props.children}</Suspense>
-      </main>
-    </>
+    <main class="flex-1">
+      <Suspense>{props.children}</Suspense>
+    </main>
   );
 };
 

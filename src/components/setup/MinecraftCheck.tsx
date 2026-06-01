@@ -15,7 +15,7 @@ export default function MinecraftCheckComponent({
   const [fatalError, setFatalError] = createSignal<Error | null>(null);
 
   async function check() {
-    let valid;
+    let valid: boolean;
     try {
       valid = await setupApi.minecraftCheck(token);
     } catch (err) {
@@ -52,6 +52,7 @@ export default function MinecraftCheckComponent({
         {error() && <p class="text-error">{error()}</p>}
         {error() && (
           <button
+            type="button"
             onClick={() => {
               setError(null);
               check();

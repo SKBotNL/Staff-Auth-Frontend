@@ -33,10 +33,7 @@ export default function SetupPage() {
                 />
               </Match>
               <Match when={stage()?.type === "totp"}>
-                <TotpSetup
-                  token={params.token as string}
-                  done={() => revalidate("setupStage")}
-                />
+                <TotpSetup token={params.token as string} />
               </Match>
             </Switch>
           </Suspense>

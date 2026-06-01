@@ -56,8 +56,11 @@ export default function CredentialsComponent({
           }}
         >
           <fieldset class="fieldset">
-            <label class="label">{t("login.credentials.username")}</label>
+            <label for="username" class="label">
+              {t("login.credentials.username")}
+            </label>
             <input
+              id="username"
               type="text"
               class="input w-full"
               placeholder={t("login.credentials.username")}
@@ -65,8 +68,11 @@ export default function CredentialsComponent({
               onInput={(e) => setUsername(e.target.value)}
               required
             />
-            <label class="label">{t("login.credentials.password")}</label>
+            <label for="password" class="label">
+              {t("login.credentials.password")}
+            </label>
             <input
+              id="password"
               type="password"
               class="input w-full"
               placeholder={t("login.credentials.password")}
