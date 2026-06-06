@@ -148,7 +148,7 @@ export default function UsersPage() {
         <div class="modal-box">
           <form method="dialog">
             <button
-              type="button"
+              type="submit"
               class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
             >
               <FiX class="text-lg" />
@@ -209,7 +209,7 @@ export default function UsersPage() {
           </form>
         </div>
         <form method="dialog" class="modal-backdrop">
-          <button type="button">Close</button>
+          <button type="submit">Close</button>
         </form>
       </dialog>
     </>
