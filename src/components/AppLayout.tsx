@@ -103,21 +103,21 @@ function App(props: ParentProps) {
                 )}
               </For>
 
-              <div class="mt-auto">
+              <div class="mt-auto max-w-full">
                 <Show when={user()}>
                   {(u) => (
                     <li class="dropdown dropdown-top dropdown-center w-full">
                       <button
                         type="button"
                         tabindex="0"
-                        class="flex flex-row items-center gap-2 max-w-full"
+                        class="flex flex-row items-center gap-2 w-full"
                       >
                         <img
                           src={u().picture}
                           alt={u().name}
                           class="w-6 h-6 rounded"
                         ></img>
-                        <span class="truncate max-w-xs">{u().name}</span>
+                        <span class="truncate">{u().name}</span>
                       </button>
                       <ul
                         tabindex="-1"
