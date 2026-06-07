@@ -1,12 +1,9 @@
-import type { Accessor, Setter } from "solid-js";
+import type { Setter } from "solid-js";
 import { t } from "../../lib/i18n";
 import type { Role } from "../../types/user";
 
-export default function RolePickerComponent({
-  role,
-  setRole,
-}: {
-  role: Accessor<Role | undefined>;
+export default function RolePickerComponent(props: {
+  role: Role | undefined;
   setRole: Setter<Role | undefined>;
 }) {
   return (
@@ -16,8 +13,8 @@ export default function RolePickerComponent({
       </label>
       <select
         id="role"
-        value={role() ?? ""}
-        onChange={(e) => setRole(e.target.value as Role)}
+        value={props.role ?? ""}
+        onChange={(e) => props.setRole(e.target.value as Role)}
         class="select w-full"
         required
       >

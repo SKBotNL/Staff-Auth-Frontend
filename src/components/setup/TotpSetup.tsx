@@ -6,16 +6,16 @@ import { setupApi } from "../../lib/setup";
 import { AppError } from "../../types/api";
 import Loader from "../Loader";
 
-function TotpSetup({ token }: { token: string }) {
+function TotpSetup(props: { token: string }) {
   const navigate = useNavigate();
-  const totpData = createAsync(() => setupApi.totpSetup(token));
+  const totpData = createAsync(() => setupApi.totpSetup(props.token));
   const [code, setCode] = createSignal("");
   const [error, setError] = createSignal<string | null>(null);
   const [fatalError, setFatalError] = createSignal<Error | null>(null);
 
   async function submit() {
     try {
-      await setupApi.totpVerify(code(), token);
+      await setupApi.totpVerify(code(), props.token);
     } catch (err) {
       if (!(err instanceof AppError)) {
         setFatalError(err as Error);
@@ -85,7 +85,7 @@ function TotpSetup({ token }: { token: string }) {
   );
 }
 
-export default function TotpSetupComponent({ token }: { token: string }) {
+export default function TotpSetupComponent(props: { token: string }) {
   return (
     <Suspense
       fallback={
@@ -96,7 +96,7 @@ export default function TotpSetupComponent({ token }: { token: string }) {
         <h1 class="text-2xl text-center font-bold">
           {t("setup.totpSetup.title")}
         </h1>
-        <TotpSetup token={token} />
+        <TotpSetup token={props.token} />
       </div>
     </Suspense>
   );

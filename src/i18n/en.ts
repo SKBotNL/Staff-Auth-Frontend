@@ -71,6 +71,8 @@ export const dict = {
     yes: "Yes",
     no: "No",
     areYouSure: "Are you sure?",
+    copy: "Copy",
+    copied: "Copied!",
     menu: {
       home: "Home",
       users: "Users",
@@ -127,8 +129,6 @@ export const dict = {
       createNewInvite: "Create new invite",
       delete: "Delete",
       create: "Create",
-      copy: "Copy",
-      copied: "Copied!",
       error: {
         failedToLoad: "Failed to load invites",
         userAlreadySetUp: "User has already been set up",

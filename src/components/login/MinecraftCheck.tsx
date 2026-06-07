@@ -4,10 +4,7 @@ import { t } from "../../lib/i18n";
 import { loginApi } from "../../lib/login";
 import { AppError } from "../../types/api";
 
-export default function MinecraftCheckComponent({
-  loginChallenge,
-  done,
-}: {
+export default function MinecraftCheckComponent(props: {
   loginChallenge: string;
   done: () => void;
 }) {
@@ -17,7 +14,7 @@ export default function MinecraftCheckComponent({
   async function check() {
     let valid: boolean;
     try {
-      valid = await loginApi.minecraftCheck(loginChallenge);
+      valid = await loginApi.minecraftCheck(props.loginChallenge);
     } catch (err) {
       if (!(err instanceof AppError)) {
         setFatalError(err as Error);
@@ -34,7 +31,7 @@ export default function MinecraftCheckComponent({
       setError("Check failed");
       return;
     }
-    done();
+    props.done();
   }
 
   onMount(check);

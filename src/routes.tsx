@@ -12,6 +12,8 @@ const Consent = lazy(() => import("./pages/consent"));
 
 const Setup = lazy(() => import("./pages/setup"));
 
+import ResetAccount from "./pages/resetAccount";
+
 export const routes: RouteDefinition[] = [
   {
     path: "/",
@@ -59,6 +61,14 @@ export const routes: RouteDefinition[] = [
     component: () => (
       <BasicLayout>
         <Setup />
+      </BasicLayout>
+    ),
+  },
+  {
+    path: "/reset-account",
+    component: () => (
+      <BasicLayout>
+        <ResetAccount />
       </BasicLayout>
     ),
   },

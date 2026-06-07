@@ -11,11 +11,11 @@ import { AppError } from "../../types/api";
 import type { InviteData } from "../../types/invite";
 import { getInvites } from "./invites.data";
 import { getUsers } from "./user/users.data";
+import Copy from "../../components/Copy";
 
-function InviteRow({ invite }: { invite: InviteData }) {
+function InviteRow(props: { invite: InviteData }) {
   const user = createAsync(() => userApi.get(invite.invitedUserId));
   const link = `${window.location.origin}/setup?token=${invite.token}`;
-  const [copied, setCopied] = createSignal(false);
   const [deleting, setDeleting] = createSignal(false);
 
   return (
@@ -23,26 +23,7 @@ function InviteRow({ invite }: { invite: InviteData }) {
       <td>
         <div class="flex flex-row items-center">
           <span>{link}</span>
-          <div
-            class="tooltip"
-            data-tip={
-              copied() ? t("panel.invites.copied") : t("panel.invites.copy")
-            }
-          >
-            <button
-              type="button"
-              class="btn btn-ghost"
-              onClick={() => {
-                navigator.clipboard.writeText(link);
-                setCopied(true);
-                setTimeout(() => {
-                  setCopied(false);
-                }, 1000);
-              }}
-            >
-              <FiCopy />
-            </button>
-          </div>
+          <Copy textToCopy={link} />
         </div>
       </td>
       <td>
@@ -60,7 +41,7 @@ function InviteRow({ invite }: { invite: InviteData }) {
           type="button"
           onClick={async () => {
             setDeleting(true);
-            await inviteApi.delete(invite.id.toString());
+            await inviteApi.delete(props.invite.id.toString());
             revalidate("invites");
           }}
           class="btn btn-soft btn-error btn-xs"

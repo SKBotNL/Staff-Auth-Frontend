@@ -7,9 +7,7 @@ export type ConfirmDialogRef = {
   close: () => void;
 };
 
-export default function ConfirmDialogComponent({
-  ref,
-}: {
+export default function ConfirmDialogComponent(props: {
   ref: (r: ConfirmDialogRef) => void;
 }) {
   const [text, setText] = createSignal<string>("");
@@ -18,7 +16,7 @@ export default function ConfirmDialogComponent({
   let dialogRef!: HTMLDialogElement;
 
   onMount(() => {
-    ref({
+    props.ref({
       open: (text: string, confirmCallback: () => void) => {
         setText(text);
         setConfirmCallback(() => confirmCallback);

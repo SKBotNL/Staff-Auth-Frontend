@@ -4,11 +4,7 @@ import { t } from "../../lib/i18n";
 import { loginApi } from "../../lib/login";
 import { AppError } from "../../types/api";
 
-export default function TotpComponent({
-  loginChallenge,
-}: {
-  loginChallenge: string;
-}) {
+export default function TotpComponent(props: { loginChallenge: string }) {
   const [code, setCode] = createSignal("");
   const [rememberMe, setRememberMe] = createSignal(false);
   const [error, setError] = createSignal<string | null>(null);
@@ -17,7 +13,11 @@ export default function TotpComponent({
   async function submit() {
     let redirectUrl: string;
     try {
-      redirectUrl = await loginApi.totp(code(), rememberMe(), loginChallenge);
+      redirectUrl = await loginApi.totp(
+        code(),
+        rememberMe(),
+        props.loginChallenge,
+      );
     } catch (err) {
       if (!(err instanceof AppError)) {
         setFatalError(err as Error);

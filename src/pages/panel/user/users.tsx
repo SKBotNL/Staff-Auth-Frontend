@@ -23,11 +23,7 @@ import { AppError } from "../../../types/api";
 import type { UserData } from "../../../types/user";
 import { getUsers } from "./users.data";
 
-function Users({
-  userDialogRef,
-}: {
-  userDialogRef: Accessor<UserDialogRef | undefined>;
-}) {
+function Users(props: { userDialogRef: UserDialogRef | undefined }) {
   const authUser = useUser();
   const users = createAsync(() => getUsers());
 
@@ -117,7 +113,7 @@ function Users({
                       <button
                         class="btn btn-ghost h-8 w-4"
                         type="button"
-                        onClick={() => userDialogRef()?.open(user.id)}
+                        onClick={() => props.userDialogRef?.open(user.id)}
                         disabled={modifying()}
                       >
                         <FiEdit class="text-base" />
@@ -241,7 +237,7 @@ export default function UsersPage() {
               <Loader text={t("panel.users.loadingUsers")} fillScreen={true} />
             }
           >
-            <Users userDialogRef={userDialogRef} />
+            <Users userDialogRef={userDialogRef()} />
           </Suspense>
         </AppErrorBoundary>
       </section>

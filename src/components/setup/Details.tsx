@@ -4,10 +4,7 @@ import { t } from "../../lib/i18n";
 import { setupApi } from "../../lib/setup";
 import { AppError } from "../../types/api";
 
-export default function DetailsComponent({
-  token,
-  done,
-}: {
+export default function DetailsComponent(props: {
   token: string;
   done: () => void;
 }) {
@@ -18,7 +15,10 @@ export default function DetailsComponent({
 
   async function submit() {
     try {
-      await setupApi.details({ email: email(), password: password() }, token);
+      await setupApi.details(
+        { email: email(), password: password() },
+        props.token,
+      );
     } catch (err) {
       if (!(err instanceof AppError)) {
         setFatalError(err as Error);
@@ -31,7 +31,7 @@ export default function DetailsComponent({
       setError(err.message);
       return;
     }
-    done();
+    props.done();
   }
 
   return (

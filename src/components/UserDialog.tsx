@@ -15,12 +15,7 @@ import type { Role } from "../types/user";
 import Loader from "./Loader";
 import RolePicker from "./user/RolePicker";
 
-function UserDialog({
-  userId,
-  close,
-  reset,
-  onFatalError,
-}: {
+function UserDialog(props: {
   userId: Accessor<number | null | undefined>;
   close: () => void;
   reset: (r: () => void) => void;
@@ -32,13 +27,13 @@ function UserDialog({
   const [minecraftUuid, setMinecraftUuid] = createSignal<string>("");
   const [role, setRole] = createSignal<Role>();
 
-  const [user] = createResource(userId, (id) => {
+  const [user] = createResource(props.userId, (id) => {
     return userApi.get(id.toString());
   });
 
   let fieldSet!: HTMLFieldSetElement;
-  reset(() => {
-    if (userId()) return;
+  props.reset(() => {
+    if (props.userId()) return;
     setEmail("");
     setMinecraftUuid("");
     setRole();
@@ -52,7 +47,7 @@ function UserDialog({
   });
 
   createEffect(async () => {
-    if (!userId()) {
+    if (!props.userId()) {
       setEmail("");
       setMinecraftUuid("");
       setRole();
@@ -66,11 +61,11 @@ function UserDialog({
       await fn();
     } catch (err) {
       if (!(err instanceof AppError)) {
-        onFatalError(err as Error);
+        props.onFatalError(err as Error);
         return false;
       }
       if (err.kind === "fatal") {
-        onFatalError(err);
+        props.onFatalError(err);
         return false;
       }
       setError(err.message);
@@ -115,7 +110,7 @@ function UserDialog({
         </button>
       </form>
       <h3 class="text-lg font-bold mb-2">
-        {userId()
+        {props.userId()
           ? t("panel.users.editUser", { username: user()?.username ?? "" })
           : t("panel.users.createNewUser")}
       </h3>
@@ -123,7 +118,7 @@ function UserDialog({
         class="w-full"
         onSubmit={async (e) => {
           e.preventDefault();
-          const success = userId() ? await update() : await create();
+          const success = props.userId() ? await update() : await create();
           if (success) close();
         }}
       >
@@ -159,7 +154,7 @@ function UserDialog({
             {t("panel.users.error.enterValidUuid")}
           </div>
 
-          <RolePicker role={role} setRole={setRole} />
+          <RolePicker role={role()} setRole={setRole} />
 
           {error() && <p class="text-error mt-2">{error()}</p>}
 
@@ -168,7 +163,7 @@ function UserDialog({
             class="btn btn-primary flex-1 mt-2"
             disabled={loading()}
           >
-            {userId() ? t("panel.users.update") : t("panel.users.create")}
+            {props.userId() ? t("panel.users.update") : t("panel.users.create")}
           </button>
         </fieldset>
       </form>
@@ -181,10 +176,7 @@ export type UserDialogRef = {
   close: () => void;
 };
 
-export default function UserDialogComponent({
-  ref,
-  onFatalError,
-}: {
+export default function UserDialogComponent(props: {
   ref: (r: UserDialogRef) => void;
   onFatalError: (error: Error) => void;
 }) {
@@ -194,7 +186,7 @@ export default function UserDialogComponent({
   let resetUserDialog!: () => void;
 
   onMount(() => {
-    ref({
+    props.ref({
       open: (userId: number | null) => {
         setUserId(userId);
         dialogRef.showModal();
@@ -223,7 +215,7 @@ export default function UserDialogComponent({
             userId={userId}
             close={() => dialogRef.close()}
             reset={(r) => (resetUserDialog = r)}
-            onFatalError={onFatalError}
+            onFatalError={props.onFatalError}
           />
         </Suspense>
       </div>

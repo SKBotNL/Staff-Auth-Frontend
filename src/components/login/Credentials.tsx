@@ -4,10 +4,7 @@ import { t } from "../../lib/i18n";
 import { loginApi } from "../../lib/login";
 import { AppError } from "../../types/api";
 
-export default function CredentialsComponent({
-  loginChallenge,
-  done,
-}: {
+export default function CredentialsComponent(props: {
   loginChallenge: string;
   done: () => void;
 }) {
@@ -23,7 +20,7 @@ export default function CredentialsComponent({
           username: username(),
           password: password(),
         },
-        loginChallenge,
+        props.loginChallenge,
       );
     } catch (err) {
       if (!(err instanceof AppError)) {
@@ -37,7 +34,7 @@ export default function CredentialsComponent({
       setError(err.message);
       return;
     }
-    done();
+    props.done();
   }
 
   return (
