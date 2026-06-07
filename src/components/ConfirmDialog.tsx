@@ -53,7 +53,7 @@ export default function ConfirmDialogComponent(props: {
         <AlertIcon class="text-5xl text-warning" />
         <div class="flex flex-col items-center">
           <h3 class="text-xl font-bold">{t("panel.areYouSure")}</h3>
-          <p class="text-md text-base-content/80">{text()}</p>
+          <p class="text-base text-base-content/80">{text()}</p>
         </div>
         <form method="dialog" class="modal-backdrop">
           {error() && <p class="text-error">{error()}</p>}
