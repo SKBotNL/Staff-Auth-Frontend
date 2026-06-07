@@ -82,7 +82,7 @@ function InviteRow(props: { invite: InviteData }) {
         <th>
           <div class="tooltip" data-tip={t("panel.invites.deleteInvite")}>
             <button
-              class="btn btn-ghost btn-square"
+              class="btn btn-ghost btn-sm btn-square btn-error"
               type="button"
               onClick={() =>
                 confirmDialogRef.open(
@@ -100,7 +100,7 @@ function InviteRow(props: { invite: InviteData }) {
               }
               disabled={modifying()}
             >
-              <TrashIcon class="text-lg text-error [button:disabled_&]:text-current" />
+              <TrashIcon class="text-xl" />
             </button>
           </div>
         </th>

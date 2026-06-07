@@ -130,10 +130,10 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
                       user.role.slice(1).toLowerCase()}
                   </td>
                   <td>{user.setUp ? t("panel.yes") : t("panel.no")}</td>
-                  <td class="whitespace-nowrap">
+                  <td class="whitespace-nowrap flex flex-row gap-1">
                     <div class="tooltip" data-tip={t("panel.users.edit")}>
                       <button
-                        class="btn btn-ghost btn-square"
+                        class="btn btn-ghost btn-sm btn-square"
                         type="button"
                         onClick={() => props.userDialogRef?.open(user.id)}
                         disabled={modifying()}
@@ -153,7 +153,7 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
                       }
                     >
                       <button
-                        class="btn btn-ghost btn-square"
+                        class={`btn btn-ghost btn-sm btn-square ${user.deactivated ? "btn-success" : "btn-warning"}`}
                         type="button"
                         onClick={() => deactivateUser(user, !user.deactivated)}
                         disabled={
@@ -162,9 +162,9 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
                         }
                       >
                         {user.deactivated ? (
-                          <ReactivateIcon class="text-lg text-success [button:disabled_&]:text-current" />
+                          <ReactivateIcon class="text-lg" />
                         ) : (
-                          <DeactivateIcon class="text-lg text-warning [button:disabled_&]:text-current" />
+                          <DeactivateIcon class="text-lg" />
                         )}
                       </button>
                     </div>
@@ -178,7 +178,7 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
                       }
                     >
                       <button
-                        class="btn btn-ghost btn-square"
+                        class="btn btn-ghost btn-sm btn-square btn-error"
                         type="button"
                         onClick={() =>
                           confirmDialogRef.open(
@@ -200,7 +200,7 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
                           modifying()
                         }
                       >
-                        <TrashIcon class="text-lg text-error [button:disabled_&]:text-current" />
+                        <TrashIcon class="text-xl" />
                       </button>
                     </div>
                   </td>
