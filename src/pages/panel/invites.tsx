@@ -1,14 +1,14 @@
 import { createAsync, revalidate } from "@solidjs/router";
 import { FiCopy, FiPlus, FiX } from "solid-icons/fi";
 import { createSignal, For, Suspense } from "solid-js";
-import AppErrorBoundary from "../components/AppErrorBoundary";
-import Loader from "../components/Loader";
-import { throwIfFatal } from "../lib/error";
-import { t } from "../lib/i18n";
-import { inviteApi } from "../lib/invite";
-import { userApi } from "../lib/user";
-import { AppError } from "../types/api";
-import type { InviteData } from "../types/invite";
+import AppErrorBoundary from "../../components/AppErrorBoundary";
+import Loader from "../../components/Loader";
+import { throwIfFatal } from "../../lib/error";
+import { t } from "../../lib/i18n";
+import { inviteApi } from "../../lib/invite";
+import { userApi } from "../../lib/user";
+import { AppError } from "../../types/api";
+import type { InviteData } from "../../types/invite";
 import { getInvites } from "./invites.data";
 import { getUsers } from "./user/users.data";
 

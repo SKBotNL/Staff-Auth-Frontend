@@ -1,10 +1,10 @@
 import { createAsync, useNavigate, useParams } from "@solidjs/router";
 import { FiChevronLeft } from "solid-icons/fi";
 import { createSignal, Suspense } from "solid-js";
-import AppErrorBoundary from "../../components/AppErrorBoundary";
-import Loader from "../../components/Loader";
-import { throwIfFatal } from "../../lib/error";
-import { t } from "../../lib/i18n";
+import AppErrorBoundary from "../../../components/AppErrorBoundary";
+import Loader from "../../../components/Loader";
+import { throwIfFatal } from "../../../lib/error";
+import { t } from "../../../lib/i18n";
 import { getUser } from "./user.data";
 
 function User() {

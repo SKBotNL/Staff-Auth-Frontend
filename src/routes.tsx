@@ -3,9 +3,9 @@ import { lazy } from "solid-js";
 
 import AppLayout from "./components/AppLayout";
 import BasicLayout from "./components/BasicLayout";
-import { preloadInvites } from "./pages/invites.data";
+import { preloadInvites } from "./pages/panel/invites.data";
 // import { preloadUser } from "./pages/user/user.data";
-import { preloadUsers } from "./pages/user/users.data";
+import { preloadUsers } from "./pages/panel/user/users.data";
 
 const Login = lazy(() => import("./pages/login"));
 const Consent = lazy(() => import("./pages/consent"));
@@ -19,11 +19,11 @@ export const routes: RouteDefinition[] = [
     children: [
       {
         path: "/",
-        component: lazy(() => import("./pages/home")),
+        component: lazy(() => import("./pages/panel/home")),
       },
       {
         path: "/users",
-        component: lazy(() => import("./pages/user/users")),
+        component: lazy(() => import("./pages/panel/user/users")),
         preload: () => preloadUsers,
       },
       // {
@@ -33,7 +33,7 @@ export const routes: RouteDefinition[] = [
       // },
       {
         path: "/invites",
-        component: lazy(() => import("./pages/invites")),
+        component: lazy(() => import("./pages/panel/invites")),
         preload: () => preloadInvites,
       },
     ],

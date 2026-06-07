@@ -9,18 +9,18 @@ import {
   FiXCircle,
 } from "solid-icons/fi";
 import { type Accessor, createSignal, For, Show, Suspense } from "solid-js";
-import AppErrorBoundary from "../../components/AppErrorBoundary";
+import AppErrorBoundary from "../../../components/AppErrorBoundary";
 import ConfirmDialog, {
   type ConfirmDialogRef,
-} from "../../components/ConfirmDialog";
-import Loader from "../../components/Loader";
-import UserDialog, { type UserDialogRef } from "../../components/UserDialog";
-import { throwIfFatal } from "../../lib/error";
-import { t } from "../../lib/i18n";
-import { userApi } from "../../lib/user";
-import { useUser } from "../../store/auth";
-import { AppError } from "../../types/api";
-import type { UserData } from "../../types/user";
+} from "../../../components/ConfirmDialog";
+import Loader from "../../../components/Loader";
+import UserDialog, { type UserDialogRef } from "../../../components/UserDialog";
+import { throwIfFatal } from "../../../lib/error";
+import { t } from "../../../lib/i18n";
+import { userApi } from "../../../lib/user";
+import { useUser } from "../../../store/auth";
+import { AppError } from "../../../types/api";
+import type { UserData } from "../../../types/user";
 import { getUsers } from "./users.data";
 
 function Users({
