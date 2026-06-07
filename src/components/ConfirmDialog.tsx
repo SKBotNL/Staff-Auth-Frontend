@@ -1,9 +1,13 @@
 import { createSignal, onMount } from "solid-js";
-import AlertIcon from "~icons/mdi/alert";
+import AlertIcon from "~icons/mdi/alert-outline";
 import { t } from "../lib/i18n";
 
 export type ConfirmDialogRef = {
-  open: (text: string, confirmCallback: () => void) => void;
+  open: (
+    text: string,
+    confirmCallback: () => Promise<string | null>,
+    closeCallback: () => void,
+  ) => void;
   close: () => void;
 };
 
@@ -11,15 +15,24 @@ export default function ConfirmDialogComponent(props: {
   ref: (r: ConfirmDialogRef) => void;
 }) {
   const [text, setText] = createSignal<string>("");
-  const [confirmCallback, setConfirmCallback] = createSignal<() => void>();
+  const [error, setError] = createSignal<string | null>(null);
+  const [confirming, setConfirming] = createSignal(false);
+  const [confirmCallback, setConfirmCallback] =
+    createSignal<() => Promise<string | null>>();
+  const [closeCallback, setCloseCallback] = createSignal<() => void>();
 
   let dialogRef!: HTMLDialogElement;
 
   onMount(() => {
     props.ref({
-      open: (text: string, confirmCallback: () => void) => {
+      open: (
+        text: string,
+        confirmCallback: () => Promise<string | null>,
+        closeCallback: () => void,
+      ) => {
         setText(text);
         setConfirmCallback(() => confirmCallback);
+        setCloseCallback(() => closeCallback);
         dialogRef.showModal();
       },
       close: () => dialogRef.close(),
@@ -27,23 +40,47 @@ export default function ConfirmDialogComponent(props: {
   });
 
   return (
-    <dialog class="modal" ref={dialogRef}>
+    <dialog
+      class="modal"
+      ref={dialogRef}
+      onTransitionEnd={(e) => {
+        if (e.propertyName === "opacity" && !dialogRef.open) {
+          setError(null);
+        }
+      }}
+    >
       <div class="modal-box flex flex-col items-center gap-6">
-        <AlertIcon class="text-4xl text-warning" />
+        <AlertIcon class="text-5xl text-warning" />
         <div class="flex flex-col items-center">
           <h3 class="text-xl font-bold">{t("panel.areYouSure")}</h3>
           <p class="text-md text-base-content/80">{text()}</p>
         </div>
         <form method="dialog" class="modal-backdrop">
+          {error() && <p class="text-error">{error()}</p>}
           <div class="w-full py-2 flex flex-row gap-2">
             <button
               type="submit"
-              onClick={() => confirmCallback()?.()}
+              onClick={async () => {
+                setConfirming(true);
+                const error = await confirmCallback()?.();
+                setConfirming(false);
+                if (!error) {
+                  dialogRef.close();
+                  closeCallback()?.();
+                  return;
+                }
+                setError(error);
+              }}
               class="btn btn-error flex-1"
+              disabled={confirming()}
             >
               {t("panel.yes")}
             </button>
-            <button type="submit" class="btn btn-primary flex-1">
+            <button
+              type="submit"
+              class="btn btn-primary flex-1"
+              disabled={confirming()}
+            >
               {t("panel.no")}
             </button>
           </div>

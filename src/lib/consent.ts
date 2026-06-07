@@ -7,7 +7,12 @@ export const consentApi = {
   consentData: async (consentChallenge: string): Promise<ConsentData> => {
     const url = new URL("/consent", BASE_URL);
     url.searchParams.set("consent_challenge", consentChallenge);
-    const response = await fetch(url);
+    let response: Response;
+    try {
+      response = await fetch(url);
+    } catch (err) {
+      throw toAppError(err);
+    }
 
     if (!response.ok)
       throw toAppError({
@@ -24,14 +29,19 @@ export const consentApi = {
     consent: boolean,
     consentChallenge: string,
   ): Promise<string> => {
-    const response = await fetch(`${BASE_URL}/consent`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        consent,
-        consentChallenge,
-      }),
-    });
+    let response: Response;
+    try {
+      response = await fetch(`${BASE_URL}/consent`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          consent,
+          consentChallenge,
+        }),
+      });
+    } catch (err) {
+      throw toAppError(err);
+    }
 
     if (!response.ok)
       throw toAppError({
@@ -51,6 +61,11 @@ function toAppError(err: unknown): AppError {
       getApiErrorMessage(err),
       err.status,
     );
+  }
+  if (err instanceof TypeError) {
+    if (err.message.startsWith("NetworkError")) {
+      throw new AppError("local", t("error.networkError"), null);
+    }
   }
   throw new AppError("fatal", t("error.unknownError"), null);
 }

@@ -2,7 +2,11 @@ import { createAsync, revalidate } from "@solidjs/router";
 import { createSignal, For, Show, Suspense } from "solid-js";
 import CloseIcon from "~icons/mdi/close";
 import PlusIcon from "~icons/mdi/plus";
+import TrashIcon from "~icons/mdi/trash-outline";
 import AppErrorBoundary from "../../components/AppErrorBoundary";
+import ConfirmDialog, {
+  type ConfirmDialogRef,
+} from "../../components/ConfirmDialog";
 import Copy from "../../components/Copy";
 import Loader from "../../components/Loader";
 import { throwIfFatal } from "../../lib/error";
@@ -17,47 +21,93 @@ import { getUsers } from "./user/users.data";
 function InviteRow(props: { invite: InviteData }) {
   const user = createAsync(() => userApi.get(props.invite.invitedUserId));
   const link = `${window.location.origin}/setup?token=${props.invite.token}`;
-  const [deleting, setDeleting] = createSignal(false);
+
+  const [fatalError, setFatalError] = createSignal<Error | null>(null);
+
+  const [modifying, setModifying] = createSignal<boolean>(false);
+
+  let confirmDialogRef!: ConfirmDialogRef;
+
+  /**
+   * @returns error, if there is one
+   */
+  async function deleteInvite(invite: InviteData): Promise<string | null> {
+    setModifying(true);
+
+    try {
+      await inviteApi.delete(invite.id.toString());
+    } catch (err) {
+      if (!(err instanceof AppError)) {
+        setFatalError(err as Error);
+        return null;
+      }
+      if (err.kind === "fatal") {
+        setFatalError(err);
+        return null;
+      }
+      return err.message;
+    } finally {
+      setModifying(false);
+    }
+    return null;
+  }
 
   return (
-    <tr>
-      <td>
-        <div class="flex flex-row items-center gap-2">
-          <span>{link}</span>
-          <Copy textToCopy={link} />
-        </div>
-      </td>
-      <td>
-        <div class="flex items-center gap-3">
-          <Show when={user()?.username}>
-            {(username) => (
-              <>
-                <img
-                  class="rounded h-12 w-12 hidden md:block"
-                  src={`https://minotar.net/helm/${user()?.minecraftUuid.replaceAll("-", "")}.png`}
-                  alt={`${username()}'s head`}
-                />
-                <div class="font-bold">{username()}</div>
-              </>
-            )}
-          </Show>
-        </div>
-      </td>
-      <th>
-        <button
-          type="button"
-          onClick={async () => {
-            setDeleting(true);
-            await inviteApi.delete(props.invite.id.toString());
-            revalidate("invites");
-          }}
-          class="btn btn-soft btn-error btn-sm"
-          disabled={deleting()}
-        >
-          {t("panel.invites.delete")}
-        </button>
-      </th>
-    </tr>
+    <>
+      {throwIfFatal(fatalError, () => setFatalError(null))()}
+
+      <tr>
+        <td>
+          <div class="flex flex-row items-center gap-2">
+            <span>{link}</span>
+            <Copy textToCopy={link} />
+          </div>
+        </td>
+        <td>
+          <div class="flex items-center gap-3">
+            <Show when={user()?.username}>
+              {(username) => (
+                <>
+                  <img
+                    class="rounded h-12 w-12 hidden md:block"
+                    src={`https://minotar.net/helm/${user()?.minecraftUuid.replaceAll("-", "")}.png`}
+                    alt={`${username()}'s head`}
+                  />
+                  <div class="font-bold">{username()}</div>
+                </>
+              )}
+            </Show>
+          </div>
+        </td>
+        <th>
+          <div class="tooltip" data-tip={t("panel.invites.deleteInvite")}>
+            <button
+              class="btn btn-ghost btn-square"
+              type="button"
+              onClick={() =>
+                confirmDialogRef.open(
+                  t("panel.invites.inviteForWillBeDeleted", {
+                    username:
+                      user()?.username ?? t("panel.users.unknownUsername"),
+                  }),
+                  async () => {
+                    return await deleteInvite(props.invite);
+                  },
+                  () => {
+                    revalidate("invites");
+                  },
+                )
+              }
+              disabled={modifying()}
+            >
+              <TrashIcon class="text-lg text-error [button:disabled_&]:text-current" />
+            </button>
+          </div>
+        </th>
+      </tr>
+
+      <ConfirmDialog ref={(r) => (confirmDialogRef = r)} />
+    </>
   );
 }
 
@@ -95,7 +145,6 @@ export default function InvitesPage() {
 
   async function create() {
     setError(null);
-
     setUpdating(true);
     try {
       await inviteApi.create({

@@ -7,7 +7,12 @@ export const setupApi = {
   currentStage: async (token: string): Promise<SetupStage> => {
     const url = new URL("/setup/currentStage", BASE_URL);
     url.searchParams.set("token", token);
-    const response = await fetch(url);
+    let response: Response;
+    try {
+      response = await fetch(url);
+    } catch (err) {
+      throw toAppError(err);
+    }
 
     if (!response.ok)
       throw toAppError({
@@ -23,14 +28,19 @@ export const setupApi = {
     details: { email: string; password: string },
     token: string,
   ) => {
-    const response = await fetch(`${BASE_URL}/setup/details`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ...details,
-        token,
-      }),
-    });
+    let response: Response;
+    try {
+      response = await fetch(`${BASE_URL}/setup/details`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...details,
+          token,
+        }),
+      });
+    } catch (err) {
+      throw toAppError(err);
+    }
 
     if (!response.ok)
       throw toAppError({
@@ -40,11 +50,16 @@ export const setupApi = {
   },
 
   minecraftCheck: async (token: string): Promise<boolean> => {
-    const response = await fetch(`${BASE_URL}/setup/minecraftcheck`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token }),
-    });
+    let response: Response;
+    try {
+      response = await fetch(`${BASE_URL}/setup/minecraftcheck`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token }),
+      });
+    } catch (err) {
+      throw toAppError(err);
+    }
 
     if (!response.ok)
       throw toAppError({
@@ -55,11 +70,16 @@ export const setupApi = {
   },
 
   totpSetup: async (token: string): Promise<TotpData> => {
-    const response = await fetch(`${BASE_URL}/setup/totpsetup`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token }),
-    });
+    let response: Response;
+    try {
+      response = await fetch(`${BASE_URL}/setup/totpsetup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token }),
+      });
+    } catch (err) {
+      throw toAppError(err);
+    }
 
     if (!response.ok)
       throw toAppError({
@@ -70,11 +90,16 @@ export const setupApi = {
   },
 
   totpVerify: async (code: string, token: string) => {
-    const response = await fetch(`${BASE_URL}/setup/totpverify`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code, token }),
-    });
+    let response: Response;
+    try {
+      response = await fetch(`${BASE_URL}/setup/totpverify`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code, token }),
+      });
+    } catch (err) {
+      throw toAppError(err);
+    }
 
     if (!response.ok)
       throw toAppError({
@@ -93,6 +118,11 @@ function toAppError(err: unknown): AppError {
       getApiErrorMessage(err),
       err.status,
     );
+  }
+  if (err instanceof TypeError) {
+    if (err.message.startsWith("NetworkError")) {
+      throw new AppError("local", t("error.networkError"), null);
+    }
   }
   return new AppError("fatal", "error.unknownError", null);
 }

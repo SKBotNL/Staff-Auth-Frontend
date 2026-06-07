@@ -39,12 +39,17 @@ export const inviteApi = {
   },
 
   create: async (inviteData: CreateInviteData): Promise<InviteData> => {
-    const response = await fetch(`${BASE_URL}/invite`, {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(inviteData),
-    });
+    let response: Response;
+    try {
+      response = await fetch(`${BASE_URL}/invite`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(inviteData),
+      });
+    } catch (err) {
+      throw toAppError(err);
+    }
 
     if (!response.ok) {
       if (response.status === 401) {
@@ -62,10 +67,15 @@ export const inviteApi = {
    * @return success
    */
   delete: async (id: string): Promise<boolean> => {
-    const response = await fetch(`${BASE_URL}/invite/${id}`, {
-      method: "DELETE",
-      credentials: "include",
-    });
+    let response: Response;
+    try {
+      response = await fetch(`${BASE_URL}/invite/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+    } catch (err) {
+      throw toAppError(err);
+    }
 
     if (!response.ok) {
       if (response.status === 401) {
@@ -80,6 +90,11 @@ export const inviteApi = {
 function toAppError(err: unknown): AppError {
   if (isApiError(err)) {
     throw new AppError("local", getApiErrorMessage(err), err.status);
+  }
+  if (err instanceof TypeError) {
+    if (err.message.startsWith("NetworkError")) {
+      throw new AppError("local", t("error.networkError"), null);
+    }
   }
   throw new AppError("fatal", t("error.unknownError"), null);
 }

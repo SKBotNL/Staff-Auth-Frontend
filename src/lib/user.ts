@@ -39,12 +39,17 @@ export const userApi = {
   },
 
   update: async (userData: UpdateUserData): Promise<UserData> => {
-    const response = await fetch(`${BASE_URL}/user/${userData.id}`, {
-      method: "PATCH",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userData),
-    });
+    let response: Response;
+    try {
+      response = await fetch(`${BASE_URL}/user/${userData.id}`, {
+        method: "PATCH",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+      });
+    } catch (err) {
+      throw toAppError(err);
+    }
 
     if (!response.ok) {
       if (response.status === 401) {
@@ -59,12 +64,17 @@ export const userApi = {
   },
 
   create: async (userData: CreateUserData): Promise<UserData> => {
-    const response = await fetch(`${BASE_URL}/user`, {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userData),
-    });
+    let response: Response;
+    try {
+      response = await fetch(`${BASE_URL}/user`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+      });
+    } catch (err) {
+      throw toAppError(err);
+    }
 
     if (!response.ok) {
       if (response.status === 401) {
@@ -82,10 +92,15 @@ export const userApi = {
    * @return success
    */
   delete: async (id: string) => {
-    const response = await fetch(`${BASE_URL}/user/${id}`, {
-      method: "DELETE",
-      credentials: "include",
-    });
+    let response: Response;
+    try {
+      response = await fetch(`${BASE_URL}/user/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+    } catch (err) {
+      throw toAppError(err);
+    }
 
     if (!response.ok) {
       if (response.status === 401) {
@@ -102,6 +117,11 @@ export const userApi = {
 function toAppError(err: unknown): AppError {
   if (isApiError(err)) {
     throw new AppError("local", getApiErrorMessage(err), err.status);
+  }
+  if (err instanceof TypeError) {
+    if (err.message.startsWith("NetworkError")) {
+      throw new AppError("local", t("error.networkError"), null);
+    }
   }
   throw new AppError("fatal", t("error.unknownError"), null);
 }

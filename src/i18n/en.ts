@@ -128,8 +128,9 @@ export const dict = {
       pickUser: "Pick a user",
       createNew: "Create new…",
       createNewInvite: "Create new invite",
-      delete: "Delete",
+      deleteInvite: "Delete invite…",
       create: "Create",
+      inviteForWillBeDeleted: "Invite for {{ username }} will be deleted",
       error: {
         failedToLoad: "Failed to load invites",
         userAlreadySetUp: "User has already been set up",

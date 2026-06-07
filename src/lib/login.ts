@@ -7,7 +7,12 @@ export const loginApi = {
   loginData: async (loginChallenge: string): Promise<LoginData> => {
     const url = new URL("/login/data", BASE_URL);
     url.searchParams.set("login_challenge", loginChallenge);
-    const response = await fetch(url);
+    let response: Response;
+    try {
+      response = await fetch(url);
+    } catch (err) {
+      throw toAppError(err);
+    }
 
     if (!response.ok)
       throw toAppError({
@@ -24,14 +29,19 @@ export const loginApi = {
     },
     loginChallenge: string,
   ) => {
-    const response = await fetch(`${BASE_URL}/login/credentials`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ...credentials,
-        loginChallenge,
-      }),
-    });
+    let response: Response;
+    try {
+      response = await fetch(`${BASE_URL}/login/credentials`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...credentials,
+          loginChallenge,
+        }),
+      });
+    } catch (err) {
+      throw toAppError(err);
+    }
 
     if (!response.ok)
       throw toAppError({
@@ -41,11 +51,16 @@ export const loginApi = {
   },
 
   minecraftCheck: async (loginChallenge: string): Promise<boolean> => {
-    const response = await fetch(`${BASE_URL}/login/minecraftcheck`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ loginChallenge }),
-    });
+    let response: Response;
+    try {
+      response = await fetch(`${BASE_URL}/login/minecraftcheck`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ loginChallenge }),
+      });
+    } catch (err) {
+      throw toAppError(err);
+    }
 
     if (!response.ok)
       throw toAppError({
@@ -63,15 +78,20 @@ export const loginApi = {
     rememberMe: boolean,
     loginChallenge: string,
   ): Promise<string> => {
-    const response = await fetch(`${BASE_URL}/login/totp`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        code,
-        rememberMe,
-        loginChallenge,
-      }),
-    });
+    let response: Response;
+    try {
+      response = await fetch(`${BASE_URL}/login/totp`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          code,
+          rememberMe,
+          loginChallenge,
+        }),
+      });
+    } catch (err) {
+      throw toAppError(err);
+    }
 
     if (!response.ok)
       throw toAppError({
@@ -91,6 +111,11 @@ function toAppError(err: unknown): AppError {
       getApiErrorMessage(err),
       err.status,
     );
+  }
+  if (err instanceof TypeError) {
+    if (err.message.startsWith("NetworkError")) {
+      throw new AppError("local", t("error.networkError"), null);
+    }
   }
   return new AppError("fatal", "error.unknownError", null);
 }

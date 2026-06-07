@@ -32,11 +32,14 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
 
   let confirmDialogRef!: ConfirmDialogRef;
 
-  async function apiCall(fn: () => Promise<void>) {
+  async function deactivateUser(user: UserData, deactivate: boolean) {
     setError(null);
     setModifying(true);
     try {
-      await fn();
+      await userApi.update({
+        id: user.id,
+        deactivated: deactivate,
+      });
     } catch (err) {
       if (!(err instanceof AppError)) {
         setFatalError(err as Error);
@@ -49,24 +52,32 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
       setError(err.message);
     } finally {
       setModifying(false);
+      revalidate("users");
     }
   }
 
-  async function deactivateUser(user: UserData, deactivate: boolean) {
-    await apiCall(async () => {
-      await userApi.update({
-        id: user.id,
-        deactivated: deactivate,
-      });
-      revalidate("users");
-    });
-  }
-
-  async function deleteUser(user: UserData) {
-    await apiCall(async () => {
+  /**
+   * @returns error, if there is one
+   */
+  async function deleteUser(user: UserData): Promise<string | null> {
+    setError(null);
+    setModifying(true);
+    try {
       await userApi.delete(user.id.toString());
-      revalidate("users");
-    });
+    } catch (err) {
+      if (!(err instanceof AppError)) {
+        setFatalError(err as Error);
+        return null;
+      }
+      if (err.kind === "fatal") {
+        setFatalError(err);
+        return null;
+      }
+      return err.message;
+    } finally {
+      setModifying(false);
+    }
+    return null;
   }
 
   return (
@@ -151,9 +162,9 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
                         }
                       >
                         {user.deactivated ? (
-                          <ReactivateIcon class="text-lg text-success" />
+                          <ReactivateIcon class="text-lg text-success [button:disabled_&]:text-current" />
                         ) : (
-                          <DeactivateIcon class="text-lg text-warning" />
+                          <DeactivateIcon class="text-lg text-warning [button:disabled_&]:text-current" />
                         )}
                       </button>
                     </div>
@@ -176,8 +187,11 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
                                 user.username ??
                                 t("panel.users.unknownUsername"),
                             }),
+                            async () => {
+                              return await deleteUser(user);
+                            },
                             () => {
-                              deleteUser(user);
+                              revalidate("users");
                             },
                           )
                         }
@@ -186,7 +200,7 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
                           modifying()
                         }
                       >
-                        <TrashIcon class="text-lg text-error" />
+                        <TrashIcon class="text-lg text-error [button:disabled_&]:text-current" />
                       </button>
                     </div>
                   </td>
