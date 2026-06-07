@@ -112,7 +112,7 @@ function Users({
                       user.role.slice(1).toLowerCase()}
                   </td>
                   <td>{user.setUp ? t("panel.yes") : t("panel.no")}</td>
-                  <th>
+                  <td class="whitespace-nowrap">
                     <div class="tooltip" data-tip={t("panel.users.edit")}>
                       <button
                         class="btn btn-ghost h-8 w-4"
@@ -180,7 +180,7 @@ function Users({
                         <FiTrash2 class="text-base" />
                       </button>
                     </div>
-                  </th>
+                  </td>
                 </tr>
               )}
             </For>
