@@ -1,5 +1,5 @@
-import { FiCopy } from "solid-icons/fi";
 import { createSignal } from "solid-js";
+import CopyIcon from "~icons/mdi/content-copy";
 import { t } from "../lib/i18n";
 
 export default function CopyComponent(props: { textToCopy: string }) {
@@ -12,7 +12,7 @@ export default function CopyComponent(props: { textToCopy: string }) {
     >
       <button
         type="button"
-        class="btn btn-ghost"
+        class="btn btn-ghost btn-xs btn-square"
         onClick={() => {
           navigator.clipboard.writeText(props.textToCopy);
           setCopied(true);
@@ -21,7 +21,7 @@ export default function CopyComponent(props: { textToCopy: string }) {
           }, 1000);
         }}
       >
-        <FiCopy />
+        <CopyIcon class="text-sm" />
       </button>
     </div>
   );

@@ -73,6 +73,7 @@ export const dict = {
     areYouSure: "Are you sure?",
     copy: "Copy",
     copied: "Copied!",
+    actions: "Actions",
     menu: {
       home: "Home",
       users: "Users",
@@ -91,7 +92,6 @@ export const dict = {
       createNewUser: "Create new user",
       update: "Update",
       deactivated: "Deactivated",
-      actions: "Actions",
       loadingUser: "Loading user…",
       loadingUsers: "Loading users…",
       edit: "Edit user…",

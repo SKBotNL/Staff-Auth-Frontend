@@ -1,6 +1,7 @@
 import { createAsync, revalidate } from "@solidjs/router";
-import { FiPlus, FiX } from "solid-icons/fi";
 import { createSignal, For, Show, Suspense } from "solid-js";
+import CloseIcon from "~icons/mdi/close";
+import PlusIcon from "~icons/mdi/plus";
 import AppErrorBoundary from "../../components/AppErrorBoundary";
 import Copy from "../../components/Copy";
 import Loader from "../../components/Loader";
@@ -21,7 +22,7 @@ function InviteRow(props: { invite: InviteData }) {
   return (
     <tr>
       <td>
-        <div class="flex flex-row items-center">
+        <div class="flex flex-row items-center gap-2">
           <span>{link}</span>
           <Copy textToCopy={link} />
         </div>
@@ -50,7 +51,7 @@ function InviteRow(props: { invite: InviteData }) {
             await inviteApi.delete(props.invite.id.toString());
             revalidate("invites");
           }}
-          class="btn btn-soft btn-error btn-xs"
+          class="btn btn-soft btn-error btn-sm"
           disabled={deleting()}
         >
           {t("panel.invites.delete")}
@@ -70,7 +71,7 @@ function Invites() {
           <tr>
             <th>{t("panel.invites.link")}</th>
             <th>{t("panel.invites.user")}</th>
-            <th></th>
+            <th>{t("panel.actions")}</th>
           </tr>
         </thead>
         <tbody>
@@ -128,7 +129,7 @@ export default function InvitesPage() {
             onClick={() => modalRef.showModal()}
             class="btn btn-soft"
           >
-            <FiPlus class="text-lg" />
+            <PlusIcon class="text-lg" />
             {t("panel.invites.createNew")}
           </button>
         </div>
@@ -157,7 +158,6 @@ export default function InvitesPage() {
           }
         }}
         ref={modalRef}
-        id="create_invite_modal"
         class="modal"
       >
         <div class="modal-box">
@@ -166,7 +166,7 @@ export default function InvitesPage() {
               type="submit"
               class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
             >
-              <FiX class="text-lg" />
+              <CloseIcon class="text-lg" />
             </button>
           </form>
           <h3 class="text-lg font-bold mb-2">

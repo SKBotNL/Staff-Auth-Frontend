@@ -1,5 +1,4 @@
 import { revalidate } from "@solidjs/router";
-import { FiX } from "solid-icons/fi";
 import {
   type Accessor,
   createEffect,
@@ -8,6 +7,7 @@ import {
   onMount,
   Suspense,
 } from "solid-js";
+import CloseIcon from "~icons/mdi/close";
 import { t } from "../lib/i18n";
 import { userApi } from "../lib/user";
 import { AppError } from "../types/api";
@@ -106,7 +106,7 @@ function UserDialog(props: {
           type="submit"
           class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
         >
-          <FiX class="text-lg" />
+          <CloseIcon class="text-lg" />
         </button>
       </form>
       <h3 class="text-lg font-bold mb-2">

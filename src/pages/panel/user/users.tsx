@@ -1,14 +1,12 @@
 import { createAsync, revalidate } from "@solidjs/router";
-import {
-  FiCheckCircle,
-  FiEdit,
-  FiPlus,
-  FiSlash,
-  FiTrash2,
-  FiX,
-  FiXCircle,
-} from "solid-icons/fi";
 import { createSignal, For, Show, Suspense } from "solid-js";
+import ReactivateIcon from "~icons/mdi/account-reactivate-outline";
+import CloseIcon from "~icons/mdi/close";
+import DeactivateIcon from "~icons/mdi/denied";
+import EditIcon from "~icons/mdi/edit-outline";
+import ErrorIcon from "~icons/mdi/error-outline";
+import PlusIcon from "~icons/mdi/plus";
+import TrashIcon from "~icons/mdi/trash-outline";
 import AppErrorBoundary from "../../../components/AppErrorBoundary";
 import ConfirmDialog, {
   type ConfirmDialogRef,
@@ -84,13 +82,13 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
               <th>{t("panel.users.minecraftUuid")}</th>
               <th>{t("panel.users.role")}</th>
               <th>{t("panel.users.setUp")}</th>
-              <th>{t("panel.users.actions")}</th>
+              <th>{t("panel.actions")}</th>
             </tr>
           </thead>
           <tbody>
             <For each={users()}>
               {(user) => (
-                <tr class={user.deactivated ? "grayscale opacity-80" : ""}>
+                <tr class={user.deactivated ? "opacity-80" : ""}>
                   <td>
                     <div class="flex items-center gap-3">
                       <Show
@@ -104,7 +102,7 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
                         {(username) => (
                           <>
                             <img
-                              class="rounded h-12 w-12 hidden md:block"
+                              class={`rounded h-12 w-12 hidden md:block${user.deactivated ? " grayscale" : ""}`}
                               src={`https://minotar.net/helm/${user.minecraftUuid.replaceAll("-", "")}.png`}
                               alt={`${username()}'s head`}
                             />
@@ -124,12 +122,12 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
                   <td class="whitespace-nowrap">
                     <div class="tooltip" data-tip={t("panel.users.edit")}>
                       <button
-                        class="btn btn-ghost h-8 w-4"
+                        class="btn btn-ghost btn-square"
                         type="button"
                         onClick={() => props.userDialogRef?.open(user.id)}
                         disabled={modifying()}
                       >
-                        <FiEdit class="text-base" />
+                        <EditIcon class="text-lg" />
                       </button>
                     </div>
 
@@ -144,7 +142,7 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
                       }
                     >
                       <button
-                        class="btn btn-ghost h-8 w-4"
+                        class="btn btn-ghost btn-square"
                         type="button"
                         onClick={() => deactivateUser(user, !user.deactivated)}
                         disabled={
@@ -153,9 +151,9 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
                         }
                       >
                         {user.deactivated ? (
-                          <FiCheckCircle class="text-base" />
+                          <ReactivateIcon class="text-lg text-success" />
                         ) : (
-                          <FiSlash class="text-base" />
+                          <DeactivateIcon class="text-lg text-warning" />
                         )}
                       </button>
                     </div>
@@ -169,7 +167,7 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
                       }
                     >
                       <button
-                        class="btn btn-ghost h-8 w-4"
+                        class="btn btn-ghost btn-square"
                         type="button"
                         onClick={() =>
                           confirmDialogRef.open(
@@ -188,7 +186,7 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
                           modifying()
                         }
                       >
-                        <FiTrash2 class="text-base" />
+                        <TrashIcon class="text-lg text-error" />
                       </button>
                     </div>
                   </td>
@@ -205,14 +203,14 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
             role="alert"
             class="alert alert-error fixed bottom-4 left-1/2 -translate-x-1/2"
           >
-            <FiXCircle class="text-2xl" />
+            <ErrorIcon class="text-2xl" />
             <span>{e()}</span>
             <button
               type="button"
               class="btn btn-ghost btn-xs w-6"
               onClick={() => setError(null)}
             >
-              <FiX class="text-lg" />{" "}
+              <CloseIcon class="text-lg" />{" "}
             </button>
           </div>
         )}
@@ -239,7 +237,7 @@ export default function UsersPage() {
             onClick={() => userDialogRef()?.open(null)}
             class="btn btn-soft"
           >
-            <FiPlus class="text-lg" />
+            <PlusIcon class="text-lg" />
             {t("panel.users.createNew")}
           </button>
         </div>

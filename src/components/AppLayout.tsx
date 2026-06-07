@@ -1,15 +1,20 @@
 import { A } from "@solidjs/router";
-import type { IconTypes } from "solid-icons";
-import { FiHome, FiLogOut, FiMenu, FiUserPlus, FiUsers } from "solid-icons/fi";
 import {
+  type Component,
   createEffect,
   createMemo,
   createSignal,
   For,
+  type JSX,
   type ParentProps,
   Show,
   Suspense,
 } from "solid-js";
+import InvitesIcon from "~icons/mdi/account-multiple-add-outline";
+import UsersIcon from "~icons/mdi/accounts-outline";
+import HomeIcon from "~icons/mdi/home-outline";
+import LogOutIcon from "~icons/mdi/logout";
+import MenuIcon from "~icons/mdi/menu";
 import { BASE_URL } from "../lib/api";
 import { throwIfFatal } from "../lib/error";
 import { dict, t } from "../lib/i18n";
@@ -34,23 +39,27 @@ function App(props: ParentProps) {
     }
   });
 
-  type MenuItem = { name: string; link: string; icon: IconTypes };
+  type MenuItem = {
+    name: string;
+    link: string;
+    icon: Component<JSX.SvgSVGAttributes<SVGSVGElement>>;
+  };
   const menuItems = createMemo(() =>
     [
       {
         name: t("panel.menu.home"),
         link: "/",
-        icon: FiHome,
+        icon: HomeIcon,
       },
       user()?.roles.includes("ADMIN") && {
         name: t("panel.menu.users"),
         link: "/users",
-        icon: FiUsers,
+        icon: UsersIcon,
       },
       user()?.roles.includes("ADMIN") && {
         name: t("panel.menu.invites"),
         link: "/invites",
-        icon: FiUserPlus,
+        icon: InvitesIcon,
       },
     ].filter((item): item is MenuItem => Boolean(item)),
   );
@@ -73,7 +82,7 @@ function App(props: ParentProps) {
           <div class="drawer-content flex flex-col">
             <nav class="navbar items-center gap-4 lg:hidden">
               <label for="drawer" class="btn btn-ghost drawer-button">
-                <FiMenu class="text-xl" />
+                <MenuIcon class="text-xl" />
               </label>
               <span>Staff-Auth</span>
             </nav>
@@ -131,7 +140,7 @@ function App(props: ParentProps) {
                             }
                             class="text-red-400"
                           >
-                            <FiLogOut class="text-lg" />
+                            <LogOutIcon class="text-lg" />
                             {t("panel.menu.logOut")}
                           </button>
                         </li>

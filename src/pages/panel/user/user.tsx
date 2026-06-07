@@ -1,6 +1,6 @@
 import { createAsync, useNavigate, useParams } from "@solidjs/router";
-import { FiChevronLeft } from "solid-icons/fi";
 import { createSignal, Suspense } from "solid-js";
+import ChevronLeftIcon from "~icons/mdi/chevron-left";
 import AppErrorBoundary from "../../../components/AppErrorBoundary";
 import Loader from "../../../components/Loader";
 import { throwIfFatal } from "../../../lib/error";
@@ -24,7 +24,7 @@ function User() {
             onClick={() => navigate(-1)}
             class="btn btn-ghost btn-sm w-8 mr-2"
           >
-            <FiChevronLeft class="text-2xl" />
+            <ChevronLeftIcon class="text-2xl" />
           </button>
           <img
             class="rounded h-12 w-12 ml-2"

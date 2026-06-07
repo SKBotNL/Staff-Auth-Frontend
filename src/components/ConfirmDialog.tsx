@@ -1,5 +1,5 @@
-import { FiAlertTriangle } from "solid-icons/fi";
 import { createSignal, onMount } from "solid-js";
+import AlertIcon from "~icons/mdi/alert";
 import { t } from "../lib/i18n";
 
 export type ConfirmDialogRef = {
@@ -29,7 +29,7 @@ export default function ConfirmDialogComponent(props: {
   return (
     <dialog class="modal" ref={dialogRef}>
       <div class="modal-box flex flex-col items-center gap-6">
-        <FiAlertTriangle class="text-4xl text-warning" />
+        <AlertIcon class="text-4xl text-warning" />
         <div class="flex flex-col items-center">
           <h3 class="text-xl font-bold">{t("panel.areYouSure")}</h3>
           <p class="text-md text-base-content/80">{text()}</p>
