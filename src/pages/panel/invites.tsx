@@ -1,6 +1,6 @@
 import { createAsync, revalidate } from "@solidjs/router";
-import { FiCopy, FiPlus, FiX } from "solid-icons/fi";
-import { createSignal, For, Suspense } from "solid-js";
+import { FiPlus, FiX } from "solid-icons/fi";
+import { createSignal, For, Show, Suspense } from "solid-js";
 import AppErrorBoundary from "../../components/AppErrorBoundary";
 import Copy from "../../components/Copy";
 import Loader from "../../components/Loader";
@@ -28,12 +28,18 @@ function InviteRow(props: { invite: InviteData }) {
       </td>
       <td>
         <div class="flex items-center gap-3">
-          <img
-            class="rounded h-12 w-12 hidden md:block"
-            src={`https://minotar.net/helm/${user()?.minecraftUuid.replaceAll("-", "")}.png`}
-            alt={`${user()?.username}'s head`}
-          />
-          <div class="font-bold">{user()?.username}</div>
+          <Show when={user()?.username}>
+            {(username) => (
+              <>
+                <img
+                  class="rounded h-12 w-12 hidden md:block"
+                  src={`https://minotar.net/helm/${user()?.minecraftUuid.replaceAll("-", "")}.png`}
+                  alt={`${username()}'s head`}
+                />
+                <div class="font-bold">{username()}</div>
+              </>
+            )}
+          </Show>
         </div>
       </td>
       <th>

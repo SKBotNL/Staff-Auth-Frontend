@@ -111,7 +111,9 @@ function UserDialog(props: {
       </form>
       <h3 class="text-lg font-bold mb-2">
         {props.userId()
-          ? t("panel.users.editUser", { username: user()?.username ?? "" })
+          ? t("panel.users.editUser", {
+              username: user()?.username ?? t("panel.users.unknownUsername"),
+            })
           : t("panel.users.createNewUser")}
       </h3>
       <form

@@ -100,6 +100,7 @@ export const dict = {
       reactivateUser: "Reactivate user",
       deleteUser: "Delete user…",
       willBeDeleted: "User {{ username }} will be deleted",
+      unknownUsername: "Unknown username",
       roles: {
         pick: "Pick a role",
         helper: "Helper",

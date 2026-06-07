@@ -8,7 +8,7 @@ import {
   FiX,
   FiXCircle,
 } from "solid-icons/fi";
-import { type Accessor, createSignal, For, Show, Suspense } from "solid-js";
+import { createSignal, For, Show, Suspense } from "solid-js";
 import AppErrorBoundary from "../../../components/AppErrorBoundary";
 import ConfirmDialog, {
   type ConfirmDialogRef,
@@ -93,12 +93,25 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
                 <tr class={user.deactivated ? "grayscale opacity-80" : ""}>
                   <td>
                     <div class="flex items-center gap-3">
-                      <img
-                        class="rounded h-12 w-12 hidden md:block"
-                        src={`https://minotar.net/helm/${user.minecraftUuid.replaceAll("-", "")}.png`}
-                        alt={`${user.username}'s head`}
-                      />
-                      <div class="font-bold">{user.username}</div>
+                      <Show
+                        when={user.username}
+                        fallback={
+                          <div class="font-bold text-error">
+                            {t("panel.users.unknownUsername")}
+                          </div>
+                        }
+                      >
+                        {(username) => (
+                          <>
+                            <img
+                              class="rounded h-12 w-12 hidden md:block"
+                              src={`https://minotar.net/helm/${user.minecraftUuid.replaceAll("-", "")}.png`}
+                              alt={`${username()}'s head`}
+                            />
+                            <div class="font-bold">{username()}</div>
+                          </>
+                        )}
+                      </Show>
                     </div>
                   </td>
                   <td>{user.email}</td>
@@ -161,7 +174,9 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
                         onClick={() =>
                           confirmDialogRef.open(
                             t("panel.users.willBeDeleted", {
-                              username: user.username,
+                              username:
+                                user.username ??
+                                t("panel.users.unknownUsername"),
                             }),
                             () => {
                               deleteUser(user);

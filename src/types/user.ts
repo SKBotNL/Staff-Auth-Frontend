@@ -1,7 +1,7 @@
 export type UserData = {
   id: number;
   uuid: string;
-  username: string;
+  username?: string;
   email?: string;
   role: Role;
   minecraftUuid: string;

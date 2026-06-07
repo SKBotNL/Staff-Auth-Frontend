@@ -31,7 +31,9 @@ function User() {
             src={`https://minotar.net/helm/${user()?.minecraftUuid.replaceAll("-", "")}.png`}
             alt={`${user()?.username}'s head`}
           />
-          <h1 class="text-2xl font-bold ml-4">{user()?.username}</h1>
+          <h1 class="text-2xl font-bold ml-4">
+            {user()?.username ?? t("panel.users.unknownUsername")}
+          </h1>
         </div>
         <div>
           <div class="flex flex-row gap-4">
