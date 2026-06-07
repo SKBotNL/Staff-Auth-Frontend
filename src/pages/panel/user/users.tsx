@@ -5,6 +5,7 @@ import CloseIcon from "~icons/mdi/close";
 import DeactivateIcon from "~icons/mdi/denied";
 import EditIcon from "~icons/mdi/edit-outline";
 import ErrorIcon from "~icons/mdi/error-outline";
+import ResetIcon from "~icons/mdi/lock-reset";
 import PlusIcon from "~icons/mdi/plus";
 import TrashIcon from "~icons/mdi/trash-outline";
 import AppErrorBoundary from "../../../components/AppErrorBoundary";
@@ -133,7 +134,7 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
                   <td class="whitespace-nowrap flex flex-row gap-1">
                     <div class="tooltip" data-tip={t("panel.users.edit")}>
                       <button
-                        class="btn btn-ghost btn-sm btn-square"
+                        class="btn btn-ghost btn-sm btn-square btn-accent"
                         type="button"
                         onClick={() => props.userDialogRef?.open(user.id)}
                         disabled={modifying()}
@@ -166,6 +167,34 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
                         ) : (
                           <DeactivateIcon class="text-lg" />
                         )}
+                      </button>
+                    </div>
+
+                    <div
+                      class="tooltip"
+                      data-tip={t("panel.users.resetUsersLogin")}
+                    >
+                      <button
+                        class="btn btn-ghost btn-sm btn-square btn-warning"
+                        type="button"
+                        // onClick={() =>
+                        //   confirmDialogRef.open(
+                        //     t("panel.users.willBeDeleted", {
+                        //       username:
+                        //         user.username ??
+                        //         t("panel.users.unknownUsername"),
+                        //     }),
+                        //     async () => {
+                        //       return await deleteUser(user);
+                        //     },
+                        //     () => {
+                        //       revalidate("users");
+                        //     },
+                        //   )
+                        // }
+                        disabled={modifying()}
+                      >
+                        <ResetIcon class="text-lg" />
                       </button>
                     </div>
 
