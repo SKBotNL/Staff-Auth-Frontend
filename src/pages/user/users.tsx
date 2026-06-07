@@ -1,91 +1,48 @@
-import { A, createAsync, revalidate } from "@solidjs/router";
-import { FiPlus, FiX } from "solid-icons/fi";
-import { createSignal, For, Suspense } from "solid-js";
+import { createAsync, revalidate } from "@solidjs/router";
+import {
+  FiEdit,
+  FiPlus,
+  FiRotateCcw,
+  FiSlash,
+  FiTrash2,
+  FiX,
+  FiXCircle,
+} from "solid-icons/fi";
+import { type Accessor, createSignal, For, Show, Suspense } from "solid-js";
 import AppErrorBoundary from "../../components/AppErrorBoundary";
+import ConfirmDialog, {
+  type ConfirmDialogRef,
+} from "../../components/ConfirmDialog";
 import Loader from "../../components/Loader";
-import RolePicker from "../../components/RolePicker";
+import UserDialog, { type UserDialogRef } from "../../components/UserDialog";
 import { throwIfFatal } from "../../lib/error";
 import { t } from "../../lib/i18n";
 import { userApi } from "../../lib/user";
+import { useUser } from "../../store/auth";
 import { AppError } from "../../types/api";
-import type { Role } from "../../types/user";
+import type { UserData } from "../../types/user";
 import { getUsers } from "./users.data";
 
-function Users() {
+function Users({
+  userDialogRef,
+}: {
+  userDialogRef: Accessor<UserDialogRef | undefined>;
+}) {
+  const authUser = useUser();
   const users = createAsync(() => getUsers());
 
-  return (
-    <div class="overflow-x-auto">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>{t("panel.users.username")}</th>
-            <th>{t("panel.users.email")}</th>
-            <th>{t("panel.users.minecraftUuid")}</th>
-            <th>{t("panel.users.role")}</th>
-            <th>{t("panel.users.deactivated")}</th>
-            <th>{t("panel.users.setUp")}</th>
-            <th>{t("panel.users.action")}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <For each={users()}>
-            {(user) => (
-              <tr>
-                <td>
-                  <div class="flex items-center gap-3">
-                    <img
-                      class="rounded h-12 w-12 hidden md:block"
-                      src={`https://minotar.net/helm/${user.minecraftUuid.replaceAll("-", "")}.png`}
-                      alt={`${user.username}'s head`}
-                    />
-                    <div class="font-bold">{user.username}</div>
-                  </div>
-                </td>
-                <td>{user.email}</td>
-                <td>{user.minecraftUuid}</td>
-                <td>
-                  {user.role[0].toUpperCase() +
-                    user.role.slice(1).toLowerCase()}
-                </td>
-                <td>{user.deactivated ? t("panel.yes") : t("panel.no")}</td>
-                <td>{user.setUp ? t("panel.yes") : t("panel.no")}</td>
-                <th>
-                  <A href={`/user/${user.id}`} class="btn btn-soft btn-xs">
-                    {t("panel.users.change")}
-                  </A>
-                </th>
-              </tr>
-            )}
-          </For>
-        </tbody>
-      </table>
-    </div>
-  );
-}
-
-export default function UsersPage() {
-  const [loading, setUpdating] = createSignal(false);
   const [error, setError] = createSignal<string | null>(null);
-  const [email, setEmail] = createSignal<string>("");
-  const [minecraftUuid, setMinecraftUuid] = createSignal<string>("");
-  const [role, setRole] = createSignal<Role>();
   const [fatalError, setFatalError] = createSignal<Error | null>(null);
 
-  let modalRef!: HTMLDialogElement;
+  const [modifying, setModifying] = createSignal<boolean>(false);
 
-  async function create() {
+  let confirmDialogRef!: ConfirmDialogRef;
+
+  async function apiCall(fn: () => Promise<void>) {
     setError(null);
-
-    setUpdating(true);
+    setModifying(true);
     try {
-      await userApi.create({
-        email: email(),
-        role: role() as Role,
-        minecraftUuid: minecraftUuid(),
-      });
-      modalRef.close();
-      revalidate("users");
+      await fn();
     } catch (err) {
       if (!(err instanceof AppError)) {
         setFatalError(err as Error);
@@ -96,11 +53,168 @@ export default function UsersPage() {
         return;
       }
       setError(err.message);
-      return;
     } finally {
-      setUpdating(false);
+      setModifying(false);
     }
   }
+
+  async function deactivateUser(user: UserData, deactivate: boolean) {
+    await apiCall(async () => {
+      await userApi.update({
+        id: user.id,
+        deactivated: deactivate,
+      });
+      revalidate("users");
+    });
+  }
+
+  async function deleteUser(user: UserData) {
+    await apiCall(async () => {
+      await userApi.delete(user.id.toString());
+      revalidate("users");
+    });
+  }
+
+  return (
+    <>
+      {throwIfFatal(fatalError, () => setFatalError(null))()}
+
+      <div class="overflow-x-auto">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>{t("panel.users.username")}</th>
+              <th>{t("panel.users.email")}</th>
+              <th>{t("panel.users.minecraftUuid")}</th>
+              <th>{t("panel.users.role")}</th>
+              <th>{t("panel.users.setUp")}</th>
+              <th>{t("panel.users.actions")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <For each={users()}>
+              {(user) => (
+                <tr class={user.deactivated ? "grayscale opacity-80" : ""}>
+                  <td>
+                    <div class="flex items-center gap-3">
+                      <img
+                        class="rounded h-12 w-12 hidden md:block"
+                        src={`https://minotar.net/helm/${user.minecraftUuid.replaceAll("-", "")}.png`}
+                        alt={`${user.username}'s head`}
+                      />
+                      <div class="font-bold">{user.username}</div>
+                    </div>
+                  </td>
+                  <td>{user.email}</td>
+                  <td>{user.minecraftUuid}</td>
+                  <td>
+                    {user.role[0].toUpperCase() +
+                      user.role.slice(1).toLowerCase()}
+                  </td>
+                  <td>{user.setUp ? t("panel.yes") : t("panel.no")}</td>
+                  <th>
+                    <div class="tooltip" data-tip={t("panel.users.edit")}>
+                      <button
+                        class="btn btn-ghost h-8 w-4"
+                        type="button"
+                        onClick={() => userDialogRef()?.open(user.id)}
+                        disabled={modifying()}
+                      >
+                        <FiEdit class="text-base" />
+                      </button>
+                    </div>
+
+                    <div
+                      class="tooltip"
+                      data-tip={
+                        user?.uuid.toString() === authUser.user()?.sub
+                          ? t("panel.users.error.deactivateSelf")
+                          : user.deactivated
+                            ? t("panel.users.reactivateUser")
+                            : t("panel.users.deactivateUser")
+                      }
+                    >
+                      <button
+                        class="btn btn-ghost h-8 w-4"
+                        type="button"
+                        onClick={() => deactivateUser(user, !user.deactivated)}
+                        disabled={
+                          user?.uuid.toString() === authUser.user()?.sub ||
+                          modifying()
+                        }
+                      >
+                        {user.deactivated ? (
+                          <FiRotateCcw class="text-base" />
+                        ) : (
+                          <FiSlash class="text-base" />
+                        )}
+                      </button>
+                    </div>
+
+                    <div
+                      class="tooltip"
+                      data-tip={
+                        user.uuid.toString() === authUser.user()?.sub
+                          ? t("panel.users.error.deleteSelf")
+                          : t("panel.users.deleteUser")
+                      }
+                    >
+                      <button
+                        class="btn btn-ghost h-8 w-4"
+                        type="button"
+                        onClick={() =>
+                          confirmDialogRef.open(
+                            t("panel.users.willBeDeleted", {
+                              username: user.username,
+                            }),
+                            () => {
+                              deleteUser(user);
+                            },
+                          )
+                        }
+                        disabled={
+                          user?.uuid.toString() === authUser.user()?.sub ||
+                          modifying()
+                        }
+                      >
+                        <FiTrash2 class="text-base" />
+                      </button>
+                    </div>
+                  </th>
+                </tr>
+              )}
+            </For>
+          </tbody>
+        </table>
+      </div>
+
+      <Show when={error()}>
+        {(e) => (
+          <div
+            role="alert"
+            class="alert alert-error fixed bottom-4 left-1/2 -translate-x-1/2"
+          >
+            <FiXCircle class="text-2xl" />
+            <span>{e()}</span>
+            <button
+              type="button"
+              class="btn btn-ghost btn-xs w-6"
+              onClick={() => setError(null)}
+            >
+              <FiX class="text-lg" />{" "}
+            </button>
+          </div>
+        )}
+      </Show>
+
+      <ConfirmDialog ref={(r) => (confirmDialogRef = r)} />
+    </>
+  );
+}
+
+export default function UsersPage() {
+  const [fatalError, setFatalError] = createSignal<Error | null>(null);
+  const [userDialogRef, setUserDialogRef] = createSignal<UserDialogRef>();
 
   return (
     <>
@@ -111,7 +225,7 @@ export default function UsersPage() {
           <h1 class="text-2xl font-bold mb-4">{t("panel.users.title")}</h1>
           <button
             type="button"
-            onClick={() => modalRef.showModal()}
+            onClick={() => userDialogRef()?.open(null)}
             class="btn btn-soft"
           >
             <FiPlus class="text-lg" />
@@ -127,91 +241,15 @@ export default function UsersPage() {
               <Loader text={t("panel.users.loadingUsers")} fillScreen={true} />
             }
           >
-            <Users />
+            <Users userDialogRef={userDialogRef} />
           </Suspense>
         </AppErrorBoundary>
       </section>
 
-      <dialog
-        onTransitionEnd={(e) => {
-          if (e.propertyName === "opacity" && !modalRef.open) {
-            setEmail("");
-            setMinecraftUuid("");
-            setRole();
-            setError(null);
-          }
-        }}
-        ref={modalRef}
-        id="create_user_modal"
-        class="modal"
-      >
-        <div class="modal-box">
-          <form method="dialog">
-            <button
-              type="submit"
-              class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-            >
-              <FiX class="text-lg" />
-            </button>
-          </form>
-          <h3 class="text-lg font-bold mb-2">{t("panel.users.createNew")}</h3>
-          <form
-            class="w-full"
-            onSubmit={(e) => {
-              e.preventDefault();
-              create();
-            }}
-          >
-            <fieldset class="fieldset">
-              <label for="email" class="label">
-                {t("panel.users.email")}
-              </label>
-              <input
-                id="email"
-                type="text"
-                class="input w-full"
-                placeholder={t("panel.users.email")}
-                value={email()}
-                onInput={(e) => setEmail(e.target.value)}
-                required
-              />
-
-              <label for="minecraftUuid" class="label">
-                {t("panel.users.minecraftUuid")}
-              </label>
-              <input
-                id="minecraftUuid"
-                type="text"
-                class="input validator w-full"
-                placeholder={t("panel.users.minecraftUuid")}
-                value={minecraftUuid()}
-                onInput={(e) => setMinecraftUuid(e.target.value)}
-                required
-                pattern="^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$"
-                title={t("panel.users.error.enterValidUuid")}
-              />
-              <div class="validator-hint hidden">
-                {t("panel.users.error.enterValidUuid")}
-              </div>
-
-              <RolePicker role={role} setRole={setRole} />
-
-              {error() && <p class="text-error mt-2">{error()}</p>}
-
-              <button
-                type="submit"
-                class="btn btn-primary flex-1 mt-2"
-                disabled={loading()}
-              >
-                {t("panel.users.create")}
-              </button>
-            </fieldset>
-          </form>
-        </div>
-        <form method="dialog" class="modal-backdrop">
-          <button type="submit">Close</button>
-        </form>
-      </dialog>
+      <UserDialog
+        ref={(r) => setUserDialogRef(r)}
+        onFatalError={(e) => setFatalError(e)}
+      />
     </>
   );
 }

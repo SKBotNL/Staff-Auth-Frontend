@@ -1,7 +1,7 @@
 export const dict = {
   login: {
     continue: "Continue",
-    loading: "Loading login...",
+    loading: "Loading login…",
     credentials: {
       title: "Login",
       username: "Username",
@@ -27,7 +27,7 @@ export const dict = {
   },
   minecraftCheck: {
     title: "Minecraft Check",
-    logIn: "Please log in...",
+    logIn: "Please log in…",
     error: {
       timeout: "You took too long to log in",
       unavailable: "The Minecraft check is currently unavailable",
@@ -35,7 +35,7 @@ export const dict = {
   },
   consent: {
     title: "Consent",
-    loading: "Loading consent...",
+    loading: "Loading consent…",
     clientWouldLikeTo: "{{ client }} would like to:",
     scopes: {
       emailRead: "Read your email address",
@@ -52,7 +52,7 @@ export const dict = {
     },
   },
   panel: {
-    loading: "Loading panel...",
+    loading: "Loading panel…",
     home: {
       applications: "Applications",
       application: {
@@ -70,6 +70,7 @@ export const dict = {
     goBack: "Go back",
     yes: "Yes",
     no: "No",
+    areYouSure: "Are you sure?",
     menu: {
       home: "Home",
       users: "Users",
@@ -85,7 +86,8 @@ export const dict = {
       setUp: "Set Up",
       change: "Change",
       create: "Create",
-      createNew: "Create new user",
+      createNew: "Create new…",
+      createNewUser: "Create new user",
       update: "Update",
       updated: "Updated",
       delete: "Delete",
@@ -93,9 +95,15 @@ export const dict = {
       deactivated: "Deactivated",
       reactivate: "Reactivate",
       reactivated: "Reactivated",
-      action: "Action",
-      loadingUser: "Loading user...",
-      loadingUsers: "Loading users...",
+      actions: "Actions",
+      loadingUser: "Loading user…",
+      loadingUsers: "Loading users…",
+      edit: "Edit user…",
+      editUser: "Edit user {{ username }}",
+      deactivateUser: "Deactivate user",
+      reactivateUser: "Reactivate user",
+      deleteUser: "Delete user…",
+      willBeDeleted: "User {{ username }} will be deleted",
       roles: {
         pick: "Pick a role",
         helper: "Helper",
@@ -119,9 +127,10 @@ export const dict = {
       title: "Invites",
       link: "Link",
       user: "User",
-      loading: "Loading invites...",
+      loading: "Loading invites…",
       pickUser: "Pick a user",
-      createNew: "Create new invite",
+      createNew: "Create new…",
+      createNewInvite: "Create new invite",
       delete: "Delete",
       create: "Create",
       copy: "Copy",
@@ -139,7 +148,7 @@ export const dict = {
     },
   },
   setup: {
-    loading: "Loading setup...",
+    loading: "Loading setup…",
     continue: "Continue",
     success: "Successfully set up your account",
     details: {
@@ -149,7 +158,7 @@ export const dict = {
     },
     totpSetup: {
       title: "TOTP Setup",
-      loading: "Loading TOTP setup...",
+      loading: "Loading TOTP setup…",
       addToAuthenticator:
         "Add the following account to your authenticator app:",
       totpQrCode: "TOTP QR code",

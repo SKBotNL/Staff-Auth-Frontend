@@ -182,7 +182,9 @@ export default function InvitesPage() {
               <FiX class="text-lg" />
             </button>
           </form>
-          <h3 class="text-lg font-bold mb-2">{t("panel.invites.createNew")}</h3>
+          <h3 class="text-lg font-bold mb-2">
+            {t("panel.invites.createNewInvite")}
+          </h3>
           <form
             class="w-full"
             onSubmit={(e) => {

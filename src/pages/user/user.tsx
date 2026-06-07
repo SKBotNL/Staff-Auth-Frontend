@@ -1,143 +1,17 @@
-import {
-  createAsync,
-  revalidate,
-  useNavigate,
-  useParams,
-} from "@solidjs/router";
+import { createAsync, useNavigate, useParams } from "@solidjs/router";
 import { FiChevronLeft } from "solid-icons/fi";
-import { createEffect, createSignal, Suspense } from "solid-js";
+import { createSignal, Suspense } from "solid-js";
 import AppErrorBoundary from "../../components/AppErrorBoundary";
 import Loader from "../../components/Loader";
-import RolePicker from "../../components/RolePicker";
 import { throwIfFatal } from "../../lib/error";
 import { t } from "../../lib/i18n";
-import { userApi } from "../../lib/user";
-import { useUser } from "../../store/auth";
-import { AppError } from "../../types/api";
-import type { Role } from "../../types/user";
 import { getUser } from "./user.data";
 
 function User() {
-  const authUser = useUser();
   const params = useParams();
   const navigate = useNavigate();
   const user = createAsync(() => getUser(params.id as string));
-  const [loading, setUpdating] = createSignal(false);
-  const [success, setSuccess] = createSignal<string | null>(null);
-  const [error, setError] = createSignal<string | null>(null);
-  const [email, setEmail] = createSignal<string>();
-  const [minecraftUuid, setMinecraftUuid] = createSignal<string>();
-  const [role, setRole] = createSignal<Role>();
   const [fatalError, setFatalError] = createSignal<Error | null>(null);
-
-  createEffect(() => {
-    setEmail(user()?.email);
-    setMinecraftUuid(user()?.minecraftUuid);
-    setRole(user()?.role);
-  });
-
-  async function update() {
-    setSuccess(null);
-    setError(null);
-
-    setUpdating(true);
-    try {
-      const u = user();
-      if (u) {
-        await userApi.update({
-          id: u.id,
-          email: email(),
-          role: role(),
-          minecraftUuid: minecraftUuid(),
-        });
-        setSuccess(t("panel.users.updated"));
-        revalidate("user");
-        revalidate("users");
-      } else {
-        setError(t("panel.error.couldNotUpdate"));
-      }
-    } catch (err) {
-      if (!(err instanceof AppError)) {
-        setFatalError(err as Error);
-        return;
-      }
-      if (err.kind === "fatal") {
-        setFatalError(err);
-        return;
-      }
-      setError(err.message);
-      return;
-    } finally {
-      setUpdating(false);
-    }
-  }
-
-  async function activate(activate: boolean) {
-    setSuccess(null);
-    setError(null);
-
-    setUpdating(true);
-    try {
-      const u = user();
-      if (u) {
-        await userApi.update({
-          id: u.id,
-          deactivated: !activate,
-        });
-        setSuccess(
-          activate
-            ? t("panel.users.reactivated")
-            : t("panel.users.deactivated"),
-        );
-        revalidate("user");
-        revalidate("users");
-      } else {
-        setError(t("panel.error.couldNotUpdate"));
-      }
-    } catch (err) {
-      if (!(err instanceof AppError)) {
-        setFatalError(err as Error);
-        return;
-      }
-      if (err.kind === "fatal") {
-        setFatalError(err);
-        return;
-      }
-      setError(err.message);
-      return;
-    } finally {
-      setUpdating(false);
-    }
-  }
-
-  async function deleteUser() {
-    setSuccess(null);
-    setError(null);
-
-    setUpdating(true);
-    try {
-      const u = user();
-      if (u) {
-        await userApi.delete(u.id.toString());
-        revalidate("user");
-        revalidate("users");
-        navigate("/users");
-      }
-    } catch (err) {
-      if (!(err instanceof AppError)) {
-        setFatalError(err as Error);
-        return;
-      }
-      if (err.kind === "fatal") {
-        setFatalError(err);
-        return;
-      }
-      setError(err.message);
-      return;
-    } finally {
-      setUpdating(false);
-    }
-  }
 
   return (
     <>
@@ -148,143 +22,39 @@ function User() {
           <button
             type="button"
             onClick={() => navigate(-1)}
-            class="btn btn-ghost mr-2"
+            class="btn btn-ghost btn-sm w-8 mr-2"
           >
             <FiChevronLeft class="text-2xl" />
           </button>
           <img
-            class="rounded h-12 w-12 mr-4"
+            class="rounded h-12 w-12 ml-2"
             src={`https://minotar.net/helm/${user()?.minecraftUuid.replaceAll("-", "")}.png`}
             alt={`${user()?.username}'s head`}
           />
-          <h1 class="text-2xl font-bold">{user()?.username}</h1>
+          <h1 class="text-2xl font-bold ml-4">{user()?.username}</h1>
         </div>
-        <form
-          class="w-full"
-          onSubmit={(e) => {
-            e.preventDefault();
-            update();
-          }}
-        >
-          <fieldset class="fieldset">
-            <label for="email" class="label">
-              {t("panel.users.email")}
-            </label>
-            <input
-              id="email"
-              type="text"
-              class="input w-full"
-              placeholder={t("panel.users.email")}
-              value={email()}
-              onInput={(e) => setEmail(e.target.value)}
-              required
-            />
-
-            <label for="minecraftUuid" class="label">
-              {t("panel.users.minecraftUuid")}
-            </label>
-            <input
-              id="minecraftUuid"
-              type="text"
-              class="input validator w-full"
-              placeholder={t("panel.users.minecraftUuid")}
-              value={minecraftUuid()}
-              onInput={(e) => setMinecraftUuid(e.target.value)}
-              required
-              pattern="^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$"
-              title={t("panel.users.error.enterValidUuid")}
-            />
-            <div class="validator-hint hidden">
-              {t("panel.users.error.enterValidUuid")}
-            </div>
-
-            <div
-              class="tooltip flex-1"
-              data-tip={
-                user()?.uuid.toString() === authUser.user()?.sub
-                  ? t("panel.users.error.changeOwnRole")
-                  : ""
-              }
-            >
-              <RolePicker role={role} setRole={setRole} />
-            </div>
-
-            <label for="setUp" class="label">
-              {t("panel.users.setUp")}
-            </label>
-            <input
-              id="setUp"
-              type="text"
-              class="input w-full"
-              placeholder={t("panel.users.setUp")}
-              value={user()?.setUp ? "Yes" : "No"}
-              disabled
-            />
-
-            {success() && <p class="text-success mt-2">{success()}</p>}
-            {error() && <p class="text-error mt-2">{error()}</p>}
-
-            <div class="flex flex-col sm:flex-row mt-4 gap-2 h-22">
-              <button
-                type="submit"
-                class="btn btn-primary flex-1"
-                disabled={
-                  loading() ||
-                  (user()?.email === email() &&
-                    user()?.minecraftUuid === minecraftUuid())
-                }
-              >
-                {t("panel.users.update")}
-              </button>
-              <div
-                class="tooltip flex-1"
-                data-tip={
-                  user()?.uuid.toString() === authUser.user()?.sub
-                    ? t("panel.users.error.deactivateSelf")
-                    : ""
-                }
-              >
-                <button
-                  type="button"
-                  onClick={() => {
-                    const deactivated = user()?.deactivated;
-                    if (deactivated === undefined) return;
-                    activate(deactivated);
-                  }}
-                  class="btn btn-warning w-full"
-                  disabled={
-                    loading() ||
-                    user()?.uuid.toString() === authUser.user()?.sub
-                  }
-                >
-                  {user()?.deactivated
-                    ? t("panel.users.reactivate")
-                    : t("panel.users.deactivate")}
-                </button>
-              </div>
-              <div
-                class="tooltip flex-1"
-                data-tip={
-                  user()?.uuid.toString() === authUser.user()?.sub
-                    ? t("panel.users.error.deleteSelf")
-                    : ""
-                }
-              >
-                <button
-                  type="button"
-                  onClick={deleteUser}
-                  class="btn btn-error w-full"
-                  disabled={
-                    loading() ||
-                    user()?.uuid.toString() === authUser.user()?.sub
-                  }
-                >
-                  {t("panel.users.delete")}
-                </button>
-              </div>
-            </div>
-          </fieldset>
-        </form>
+        <div>
+          <div class="flex flex-row gap-4">
+            <span class="font-bold">{t("panel.users.email")}</span>
+            <span>{user()?.email}</span>
+          </div>
+          <div class="flex flex-row gap-4">
+            <span class="font-bold">{t("panel.users.minecraftUuid")}</span>
+            <span>{user()?.minecraftUuid}</span>
+          </div>
+          <div class="flex flex-row gap-4">
+            <span class="font-bold">{t("panel.users.role")}</span>
+            <span>{user()?.role}</span>
+          </div>
+          <div class="flex flex-row gap-4">
+            <span class="font-bold">{t("panel.users.setUp")}</span>
+            <span>{user()?.setUp ? t("panel.yes") : t("panel.no")}</span>
+          </div>
+          <div class="flex flex-row gap-4">
+            <span class="font-bold">{t("panel.users.deactivated")}</span>
+            <span>{user()?.deactivated ? t("panel.yes") : t("panel.no")}</span>
+          </div>
+        </div>
       </div>
     </>
   );

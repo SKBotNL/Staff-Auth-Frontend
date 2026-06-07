@@ -1,6 +1,6 @@
 import type { Accessor, Setter } from "solid-js";
-import { t } from "../lib/i18n";
-import type { Role } from "../types/user";
+import { t } from "../../lib/i18n";
+import type { Role } from "../../types/user";
 
 export default function RolePickerComponent({
   role,
