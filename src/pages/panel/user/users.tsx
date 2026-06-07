@@ -1,8 +1,8 @@
 import { createAsync, revalidate } from "@solidjs/router";
 import {
+  FiCheckCircle,
   FiEdit,
   FiPlus,
-  FiRotateCcw,
   FiSlash,
   FiTrash2,
   FiX,
@@ -153,7 +153,7 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
                         }
                       >
                         {user.deactivated ? (
-                          <FiRotateCcw class="text-base" />
+                          <FiCheckCircle class="text-base" />
                         ) : (
                           <FiSlash class="text-base" />
                         )}
