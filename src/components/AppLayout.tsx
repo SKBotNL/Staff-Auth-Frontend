@@ -102,43 +102,41 @@ function App(props: ParentProps) {
               )}
             </For>
 
-            <div class="mt-auto max-w-full">
-              <Show when={user()}>
-                {(u) => (
-                  <li class="dropdown dropdown-top dropdown-center w-full">
-                    <button
-                      type="button"
-                      tabindex="0"
-                      class="flex flex-row items-center gap-2 w-full"
-                    >
-                      <img
-                        src={u().picture}
-                        alt={u().name}
-                        class="w-6 h-6 rounded"
-                      ></img>
-                      <span class="truncate">{u().name}</span>
-                    </button>
-                    <ul
-                      tabindex="-1"
-                      class="dropdown-content menu bg-base-100 rounded-box z-1 w-full p-2 shadow-sm"
-                    >
-                      <li>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            (window.location.href = `${BASE_URL}/logout`)
-                          }
-                          class="text-red-400"
-                        >
-                          <LogOutIcon class="text-lg" />
-                          {t("panel.menu.logOut")}
-                        </button>
-                      </li>
-                    </ul>
-                  </li>
-                )}
-              </Show>
-            </div>
+            <Show when={user()}>
+              {(u) => (
+                <li class="dropdown dropdown-top dropdown-center mt-auto max-w-full">
+                  <button
+                    type="button"
+                    tabindex="0"
+                    class="flex flex-row items-center gap-2 w-full"
+                  >
+                    <img
+                      src={u().picture}
+                      alt={u().name}
+                      class="w-6 h-6 rounded"
+                    ></img>
+                    <span class="truncate">{u().name}</span>
+                  </button>
+                  <ul
+                    tabindex="-1"
+                    class="dropdown-content menu bg-base-100 rounded-box z-1 w-full p-2 shadow-sm"
+                  >
+                    <li>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          (window.location.href = `${BASE_URL}/logout`)
+                        }
+                        class="text-red-400"
+                      >
+                        <LogOutIcon class="text-lg" />
+                        {t("panel.menu.logOut")}
+                      </button>
+                    </li>
+                  </ul>
+                </li>
+              )}
+            </Show>
           </ul>
         </div>
       </div>
