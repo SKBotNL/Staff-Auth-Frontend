@@ -33,7 +33,7 @@ function App(props: ParentProps) {
 
   createEffect(() => {
     const err = error();
-    if (err) {
+    if (err && err.status !== 401) {
       setFatalError(err);
       return;
     }
