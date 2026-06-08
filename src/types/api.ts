@@ -17,3 +17,5 @@ export class AppError extends Error {
     this.status = status;
   }
 }
+
+export class NeedToLoginError extends Error {}

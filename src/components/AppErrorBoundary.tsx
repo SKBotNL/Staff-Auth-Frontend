@@ -1,6 +1,7 @@
 import { ErrorBoundary, type ParentProps } from "solid-js";
+import { LOGIN_URL } from "../lib/api";
 import { t } from "../lib/i18n";
-import { AppError } from "../types/api";
+import { AppError, NeedToLoginError } from "../types/api";
 import ErrorComponent from "./ErrorComponent";
 
 export default function AppErrorBoundaryComponent(
@@ -11,7 +12,10 @@ export default function AppErrorBoundaryComponent(
       fallback={(e, reset) => {
         let text: string;
         let canReset = true;
-        if (e instanceof TypeError) {
+        if (e instanceof NeedToLoginError) {
+          window.location.href = LOGIN_URL;
+          return;
+        } else if (e instanceof TypeError) {
           text = t("error.networkError");
         } else if (e instanceof AppError) {
           if (e.message === t("error.unknownError")) {

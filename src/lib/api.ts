@@ -1,5 +1,10 @@
 import { t } from "../lib/i18n";
-import { type ApiError, AppError, type MeData } from "../types/api";
+import {
+  type ApiError,
+  AppError,
+  type MeData,
+  NeedToLoginError,
+} from "../types/api";
 
 export const BASE_URL = import.meta.env.VITE_API_URL;
 if (!BASE_URL) throw new Error("VITE_API_URL not set");
@@ -12,8 +17,9 @@ export const api = {
 
     if (!response.ok) {
       if (response.status === 401) {
-        window.location.href = LOGIN_URL;
+        throw new NeedToLoginError();
       }
+
       throw toAppError({
         status: response.status,
         message: await response.text(),

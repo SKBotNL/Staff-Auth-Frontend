@@ -17,7 +17,7 @@ import UserDialog, { type UserDialogRef } from "../../../components/UserDialog";
 import { throwIfFatal } from "../../../lib/error";
 import { t } from "../../../lib/i18n";
 import { userApi } from "../../../lib/user";
-import { useUser } from "../../../store/auth";
+import { useUser } from "../../../store/user";
 import { AppError } from "../../../types/api";
 import type { UserData } from "../../../types/user";
 import { getUsers } from "./users.data";

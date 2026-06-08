@@ -1,6 +1,6 @@
 import { createMemo, For } from "solid-js";
 import { t } from "../../lib/i18n";
-import { useUser } from "../../store/auth";
+import { useUser } from "../../store/user";
 
 export default function HomePage() {
   const { user } = useUser();
