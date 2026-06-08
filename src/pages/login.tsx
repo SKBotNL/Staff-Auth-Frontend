@@ -11,12 +11,13 @@ import Loader from "../components/Loader";
 import Credentials from "../components/login/Credentials";
 import MinecraftCheck from "../components/login/MinecraftCheck";
 import Totp from "../components/login/Totp";
-import { t } from "../lib/i18n";
 import { getStage } from "../lib/login";
+import { useI18n } from "../providers/I18nProvider";
 import { AppError } from "../types/api";
 import { getLoginData } from "./login.data";
 
 export default function LoginPage() {
+  const { t } = useI18n();
   const [params] = useSearchParams();
   const loginData = createAsync(() => getLoginData(params.login_challenge));
   createEffect(() => {

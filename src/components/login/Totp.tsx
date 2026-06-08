@@ -1,10 +1,12 @@
 import { createSignal } from "solid-js";
 import { throwIfFatal } from "../../lib/error";
-import { t } from "../../lib/i18n";
 import { loginApi } from "../../lib/login";
+import { useI18n } from "../../providers/I18nProvider";
 import { AppError } from "../../types/api";
 
 export default function TotpComponent(props: { loginChallenge: string }) {
+  const { t } = useI18n();
+
   const [code, setCode] = createSignal("");
   const [rememberMe, setRememberMe] = createSignal(false);
   const [error, setError] = createSignal<string | null>(null);
@@ -27,7 +29,7 @@ export default function TotpComponent(props: { loginChallenge: string }) {
         setFatalError(err);
         return;
       }
-      setError(err.message);
+      setError(t(err.message));
       return;
     }
     window.location.href = redirectUrl;

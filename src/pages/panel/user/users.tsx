@@ -15,14 +15,15 @@ import ConfirmDialog, {
 import Loader from "../../../components/Loader";
 import UserDialog, { type UserDialogRef } from "../../../components/UserDialog";
 import { throwIfFatal } from "../../../lib/error";
-import { t } from "../../../lib/i18n";
 import { userApi } from "../../../lib/user";
+import { useI18n } from "../../../providers/I18nProvider";
 import { useUser } from "../../../store/user";
 import { AppError } from "../../../types/api";
 import type { UserData } from "../../../types/user";
 import { getUsers } from "./users.data";
 
 function Users(props: { userDialogRef: UserDialogRef | undefined }) {
+  const { t } = useI18n();
   const authUser = useUser();
   const users = createAsync(() => getUsers());
 
@@ -50,7 +51,7 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
         setFatalError(err);
         return;
       }
-      setError(err.message);
+      setError(t(err.message));
     } finally {
       setModifying(false);
       revalidate("users");
@@ -74,7 +75,7 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
         setFatalError(err);
         return null;
       }
-      return err.message;
+      return t(err.message);
     } finally {
       setModifying(false);
     }
@@ -116,7 +117,7 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
                             <img
                               class={`rounded h-12 w-12 hidden md:block${user.deactivated ? " grayscale" : ""}`}
                               src={`https://minotar.net/helm/${user.minecraftUuid.replaceAll("-", "")}.png`}
-                              alt={`${username()}'s head`}
+                              alt={`${username()}’s ${t("panel.picture")}`}
                             />
                             <div class="font-bold">{username()}</div>
                           </>
@@ -265,6 +266,8 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
 }
 
 export default function UsersPage() {
+  const { t } = useI18n();
+
   const [fatalError, setFatalError] = createSignal<Error | null>(null);
   const [userDialogRef, setUserDialogRef] = createSignal<UserDialogRef>();
 

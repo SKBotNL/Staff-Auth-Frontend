@@ -1,4 +1,4 @@
-import { t } from "../lib/i18n";
+import type { TranslationKey } from "../contexts/I18nContext";
 import {
   type ApiError,
   AppError,
@@ -36,13 +36,13 @@ function toAppError(err: unknown): AppError {
   throw new AppError("fatal", "error.unknownError", null);
 }
 
-function getApiErrorMessage(err: ApiError): string {
+function getApiErrorMessage(err: ApiError): TranslationKey {
   if (err.status === 429) {
-    return t("error.tooManyRequests");
+    return "error.tooManyRequests";
   }
   switch (err.message) {
     default:
-      return t("error.unknownError");
+      return "error.unknownError";
   }
 }
 

@@ -1,4 +1,4 @@
-import { t } from "../lib/i18n";
+import type { TranslationKey } from "../contexts/I18nContext";
 import { type ApiError, AppError } from "../types/api";
 import type { SetupStage, TotpData } from "../types/setup";
 import { BASE_URL, isApiError } from "./api";
@@ -121,29 +121,29 @@ function toAppError(err: unknown): AppError {
   }
   if (err instanceof TypeError) {
     if (err.message.startsWith("NetworkError")) {
-      throw new AppError("local", t("error.networkError"), null);
+      throw new AppError("local", "error.networkError", null);
     }
   }
   return new AppError("fatal", "error.unknownError", null);
 }
 
-function getApiErrorMessage(err: ApiError): string {
+function getApiErrorMessage(err: ApiError): TranslationKey {
   if (err.status === 429) {
-    return t("error.tooManyRequests");
+    return "error.tooManyRequests";
   }
   switch (err.message) {
     case "MINECRAFT_CHECK_TIMEOUT":
-      return t("minecraftCheck.error.timeout");
+      return "minecraftCheck.error.timeout";
     case "MINECRAFT_CHECK_UNAVAILABLE":
-      return t("minecraftCheck.error.unavailable");
+      return "minecraftCheck.error.unavailable";
     case "INCORRECT_TOTP_CODE":
-      return t("totp.error.invalidCode");
+      return "totp.error.invalidCode";
     case "INVALID_INVITE":
-      return t("setup.error.invalidToken");
+      return "setup.error.invalidToken";
     case "DEACTIVATED":
-      return t("setup.error.deactivated");
+      return "setup.error.deactivated";
     default:
-      return t("error.unknownError");
+      return "error.unknownError";
   }
 }
 
@@ -158,8 +158,8 @@ function getStage(stage: string): SetupStage {
     case "TOTP_VERIFY":
       return { type: "totpVerify" };
     case "FINALIZE":
-      throw new AppError("fatal", t("setup.error.finalized"), null);
+      throw new AppError("fatal", "setup.error.finalized", null);
     default:
-      throw new AppError("fatal", t("error.unknownError"), null);
+      throw new AppError("fatal", "error.unknownError", null);
   }
 }

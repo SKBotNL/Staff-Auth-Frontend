@@ -1,11 +1,13 @@
 import type { Setter } from "solid-js";
-import { t } from "../../lib/i18n";
+import { useI18n } from "../../providers/I18nProvider";
 import type { Role } from "../../types/user";
 
 export default function RolePickerComponent(props: {
   role: Role | undefined;
   setRole: Setter<Role | undefined>;
 }) {
+  const { t } = useI18n();
+
   return (
     <>
       <label for="role" class="label">

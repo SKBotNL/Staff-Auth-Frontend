@@ -1,13 +1,14 @@
 import { useNavigate } from "@solidjs/router";
 import { Show } from "solid-js";
 import ErrorIcon from "~icons/mdi/error-outline";
-import { t } from "../lib/i18n";
+import { useI18n } from "../providers/I18nProvider";
 
 export default function ErrorComponent(props: {
   text: string;
   fillScreen: boolean;
   reset?: () => void;
 }) {
+  const { t } = useI18n();
   const navigate = useNavigate();
 
   return (

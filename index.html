@@ -4,7 +4,16 @@
         <meta charset="utf-8" />
         <link rel="icon" type="image/webp" href="/favicon.webp" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#000000" />
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="
+          default-src 'self';
+          script-src 'self';
+          style-src 'self' 'unsafe-inline';
+          img-src * data: blob:;
+          connect-src 'self' %VITE_API_URL%;
+        "
+        />
         <title>Staff-Auth</title>
     </head>
     <body>

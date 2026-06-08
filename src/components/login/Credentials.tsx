@@ -1,13 +1,15 @@
 import { createSignal } from "solid-js";
 import { throwIfFatal } from "../../lib/error";
-import { t } from "../../lib/i18n";
 import { loginApi } from "../../lib/login";
+import { useI18n } from "../../providers/I18nProvider";
 import { AppError } from "../../types/api";
 
 export default function CredentialsComponent(props: {
   loginChallenge: string;
   done: () => void;
 }) {
+  const { t } = useI18n();
+
   const [username, setUsername] = createSignal("");
   const [password, setPassword] = createSignal("");
   const [error, setError] = createSignal<string | null>(null);
@@ -31,7 +33,7 @@ export default function CredentialsComponent(props: {
         setFatalError(err);
         return;
       }
-      setError(err.message);
+      setError(t(err.message));
       return;
     }
     props.done();

@@ -31,6 +31,7 @@ export const dict = {
     error: {
       timeout: "You took too long to log in",
       unavailable: "The Minecraft check is currently unavailable",
+      differentIp: "You logged in with a different IP",
     },
   },
   consent: {
@@ -74,6 +75,7 @@ export const dict = {
     copy: "Copy",
     copied: "Copied!",
     actions: "Actions",
+    picture: "picture",
     menu: {
       home: "Home",
       users: "Users",
@@ -101,6 +103,7 @@ export const dict = {
       deleteUser: "Delete user…",
       willBeDeleted: "User {{ username }} will be deleted",
       unknownUsername: "Unknown username",
+      resetUsersLogin: "Reset user’s login…",
       roles: {
         pick: "Pick a role",
         helper: "Helper",

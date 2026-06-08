@@ -1,6 +1,5 @@
 import * as i18n from "@solid-primitives/i18n";
-import { createAsync } from "@solidjs/router";
-import { createSignal } from "solid-js";
+import { createContext } from "solid-js";
 
 /*
 Assuming the dictionaries are in the following structure:
@@ -17,15 +16,17 @@ import type * as en from "../i18n/en.ts";
 export type Locale = "en"; // | "nl"
 export type RawDictionary = typeof en.dict;
 export type Dictionary = i18n.Flatten<RawDictionary>;
+export type TranslationKey = {
+  [K in keyof Dictionary]: Dictionary[K] extends string ? K : never;
+}[keyof Dictionary];
 
-async function fetchDictionary(locale: Locale): Promise<Dictionary> {
+export async function fetchDictionary(locale: Locale): Promise<Dictionary> {
   const dict: RawDictionary = (await import(`../i18n/${locale}.ts`)).dict;
-  return i18n.flatten(dict); // flatten the dictionary to make all nested keys available top-level
+  return i18n.flatten(dict);
 }
 
-export const [locale, setLocale] = createSignal<Locale>("en");
-export const dict = createAsync(() => fetchDictionary(locale()));
-export const t = i18n.translator(
-  () => dict() ?? ({} as Dictionary),
-  i18n.resolveTemplate,
-);
+export const I18nContext = createContext<{
+  locale: () => Locale;
+  setLocale: (locale: Locale) => void;
+  t: i18n.Translator<Dictionary>;
+}>();

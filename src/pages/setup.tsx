@@ -4,10 +4,11 @@ import Loader from "../components/Loader";
 import Details from "../components/setup/Details";
 import MinecraftCheck from "../components/setup/MinecraftCheck";
 import TotpSetup from "../components/setup/TotpSetup";
-import { t } from "../lib/i18n";
+import { useI18n } from "../providers/I18nProvider";
 import { getSetupStage } from "./setup.data";
 
 export default function SetupPage() {
+  const { t } = useI18n();
   const [params] = useSearchParams();
   const stage = createAsync(() => getSetupStage(params.token));
 

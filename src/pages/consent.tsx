@@ -1,17 +1,19 @@
 import { createAsync, useSearchParams } from "@solidjs/router";
 import { createEffect, For, Show, Suspense } from "solid-js";
 import Loader from "../components/Loader";
+import type { TranslationKey } from "../contexts/I18nContext";
 import { consentApi } from "../lib/consent";
-import { t } from "../lib/i18n";
+import { useI18n } from "../providers/I18nProvider";
 import { getConsentData } from "./consent.data";
 
-const scopeMap = new Map<string, () => string>([
-  ["email", () => t("consent.scopes.emailRead")],
-  ["profile", () => t("consent.scopes.profileRead")],
-  ["roles", () => t("consent.scopes.rolesRead")],
+const scopeMap = new Map<string, TranslationKey>([
+  ["email", "consent.scopes.emailRead"],
+  ["profile", "consent.scopes.profileRead"],
+  ["roles", "consent.scopes.rolesRead"],
 ]);
 
 export default function ConsentPage() {
+  const { t } = useI18n();
   const [params] = useSearchParams();
   const consentData = createAsync(() =>
     getConsentData(params.consent_challenge),
@@ -50,8 +52,9 @@ export default function ConsentPage() {
                   <For each={consentData()?.scopes}>
                     {(scope) => (
                       <li>
-                        {scopeMap.get(scope)?.() ??
-                          t("consent.scopes.default", { scope })}
+                        {t(scopeMap.get("") ?? "consent.scopes.default", {
+                          scope,
+                        })}
                       </li>
                     )}
                   </For>

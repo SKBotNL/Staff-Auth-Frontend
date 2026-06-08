@@ -4,10 +4,11 @@ import ChevronLeftIcon from "~icons/mdi/chevron-left";
 import AppErrorBoundary from "../../../components/AppErrorBoundary";
 import Loader from "../../../components/Loader";
 import { throwIfFatal } from "../../../lib/error";
-import { t } from "../../../lib/i18n";
+import { useI18n } from "../../../providers/I18nProvider";
 import { getUser } from "./user.data";
 
 function User() {
+  const { t } = useI18n();
   const params = useParams();
   const navigate = useNavigate();
   const user = createAsync(() => getUser(params.id as string));
@@ -29,7 +30,7 @@ function User() {
           <img
             class="rounded h-12 w-12 ml-2"
             src={`https://minotar.net/helm/${user()?.minecraftUuid.replaceAll("-", "")}.png`}
-            alt={`${user()?.username}'s head`}
+            alt={`${user()?.username}’s ${t("panel.picture")}`}
           />
           <h1 class="text-2xl font-bold ml-4">
             {user()?.username ?? t("panel.users.unknownUsername")}
@@ -63,6 +64,8 @@ function User() {
 }
 
 export default function UserPage() {
+  const { t } = useI18n();
+
   return (
     <section class="p-8">
       <AppErrorBoundary fallbackError={t("panel.users.error.failedToLoadUser")}>

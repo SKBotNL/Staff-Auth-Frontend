@@ -1,8 +1,9 @@
 import { createMemo, For } from "solid-js";
-import { t } from "../../lib/i18n";
+import { useI18n } from "../../providers/I18nProvider";
 import { useUser } from "../../store/user";
 
 export default function HomePage() {
+  const { t } = useI18n();
   const { user } = useUser();
 
   type Application = { name: string; link: string; icon: string };

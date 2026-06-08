@@ -1,12 +1,14 @@
 import { createAsync, useNavigate } from "@solidjs/router";
 import { createSignal, Suspense } from "solid-js";
 import { throwIfFatal } from "../../lib/error";
-import { t } from "../../lib/i18n";
 import { setupApi } from "../../lib/setup";
+import { useI18n } from "../../providers/I18nProvider";
 import { AppError } from "../../types/api";
 import Loader from "../Loader";
 
 function TotpSetup(props: { token: string }) {
+  const { t } = useI18n();
+
   const navigate = useNavigate();
   const totpData = createAsync(() => setupApi.totpSetup(props.token));
   const [code, setCode] = createSignal("");
@@ -25,7 +27,7 @@ function TotpSetup(props: { token: string }) {
         setFatalError(err);
         return;
       }
-      setError(err.message);
+      setError(t(err.message));
       return;
     }
     navigate("/successful-setup");
@@ -86,6 +88,8 @@ function TotpSetup(props: { token: string }) {
 }
 
 export default function TotpSetupComponent(props: { token: string }) {
+  const { t } = useI18n();
+
   return (
     <Suspense
       fallback={

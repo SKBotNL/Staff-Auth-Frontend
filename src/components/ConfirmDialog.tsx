@@ -1,6 +1,6 @@
 import { createSignal, onMount } from "solid-js";
 import AlertIcon from "~icons/mdi/alert-outline";
-import { t } from "../lib/i18n";
+import { useI18n } from "../providers/I18nProvider";
 
 export type ConfirmDialogRef = {
   open: (
@@ -14,6 +14,8 @@ export type ConfirmDialogRef = {
 export default function ConfirmDialogComponent(props: {
   ref: (r: ConfirmDialogRef) => void;
 }) {
+  const { t } = useI18n();
+
   const [text, setText] = createSignal<string>("");
   const [error, setError] = createSignal<string | null>(null);
   const [confirming, setConfirming] = createSignal(false);

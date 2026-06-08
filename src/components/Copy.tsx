@@ -1,8 +1,10 @@
 import { createSignal } from "solid-js";
 import CopyIcon from "~icons/mdi/content-copy";
-import { t } from "../lib/i18n";
+import { useI18n } from "../providers/I18nProvider";
 
 export default function CopyComponent(props: { textToCopy: string }) {
+  const { t } = useI18n();
+
   const [copied, setCopied] = createSignal(false);
 
   return (

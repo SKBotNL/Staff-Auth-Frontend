@@ -1,4 +1,4 @@
-import { t } from "../lib/i18n";
+import type { TranslationKey } from "../contexts/I18nContext";
 import { type ApiError, AppError } from "../types/api";
 import type { CreateInviteData, InviteData } from "../types/invite";
 import { BASE_URL, isApiError, LOGIN_URL } from "./api";
@@ -93,25 +93,25 @@ function toAppError(err: unknown): AppError {
   }
   if (err instanceof TypeError) {
     if (err.message.startsWith("NetworkError")) {
-      throw new AppError("local", t("error.networkError"), null);
+      throw new AppError("local", "error.networkError", null);
     }
   }
-  throw new AppError("fatal", t("error.unknownError"), null);
+  throw new AppError("fatal", "error.unknownError", null);
 }
 
-function getApiErrorMessage(err: ApiError): string {
+function getApiErrorMessage(err: ApiError): TranslationKey {
   if (err.status === 429) {
-    return t("error.tooManyRequests");
+    return "error.tooManyRequests";
   }
   if (err.status === 401 || err.status === 403) {
-    return t("error.unauthorized");
+    return "error.unauthorized";
   }
   switch (err.message) {
     case "USER_ALREADY_SET_UP":
-      return t("panel.invites.error.userAlreadySetUp");
+      return "panel.invites.error.userAlreadySetUp";
     case "DUPLICATE_INVITE":
-      return t("panel.invites.error.duplicate");
+      return "panel.invites.error.duplicate";
     default:
-      return t("error.unknownError");
+      return "error.unknownError";
   }
 }

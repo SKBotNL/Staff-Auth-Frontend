@@ -1,4 +1,4 @@
-import { t } from "../lib/i18n";
+import type { TranslationKey } from "../contexts/I18nContext";
 import { type ApiError, AppError } from "../types/api";
 import type { LoginData, LoginStage } from "../types/login";
 import { BASE_URL, isApiError } from "./api";
@@ -114,31 +114,31 @@ function toAppError(err: unknown): AppError {
   }
   if (err instanceof TypeError) {
     if (err.message.startsWith("NetworkError")) {
-      throw new AppError("local", t("error.networkError"), null);
+      throw new AppError("local", "error.networkError", null);
     }
   }
   return new AppError("fatal", "error.unknownError", null);
 }
 
-function getApiErrorMessage(err: ApiError): string {
+function getApiErrorMessage(err: ApiError): TranslationKey {
   if (err.status === 429) {
-    return t("error.tooManyRequests");
+    return "error.tooManyRequests";
   }
   switch (err.message) {
     case "INCORRECT_USERNAME_OR_PASSWORD":
-      return t("login.credentials.error.incorrectUsernameOrPassword");
+      return "login.credentials.error.incorrectUsernameOrPassword";
     case "MINECRAFT_CHECK_TIMEOUT":
-      return t("minecraftCheck.error.timeout");
+      return "minecraftCheck.error.timeout";
     case "MINECRAFT_CHECK_UNAVAILABLE":
-      return t("minecraftCheck.error.unavailable");
+      return "minecraftCheck.error.unavailable";
     case "INCORRECT_TOTP_CODE":
-      return t("totp.error.invalidCode");
+      return "totp.error.invalidCode";
     case "INVALID_LOGIN_CHALLENGE":
-      return t("login.error.invalidChallenge");
+      return "login.error.invalidChallenge";
     case "LOGIN_REQUEST_USED":
-      return t("login.error.challengeUsed");
+      return "login.error.challengeUsed";
     default:
-      return t("error.unknownError");
+      return "error.unknownError";
   }
 }
 
@@ -151,8 +151,8 @@ export function getStage(stage: string): LoginStage {
     case "TOTP":
       return { type: "totp" };
     case "ACCEPT":
-      throw new AppError("fatal", t("login.error.challengeUsed"), null);
+      throw new AppError("fatal", "login.error.challengeUsed", null);
     default:
-      throw new AppError("fatal", t("error.unknownError"), null);
+      throw new AppError("fatal", "error.unknownError", null);
   }
 }

@@ -1,4 +1,4 @@
-import { t } from "../lib/i18n";
+import type { TranslationKey } from "../contexts/I18nContext";
 import { type ApiError, AppError } from "../types/api";
 import type { CreateUserData, UpdateUserData, UserData } from "../types/user";
 import { BASE_URL, isApiError, LOGIN_URL } from "./api";
@@ -120,31 +120,31 @@ function toAppError(err: unknown): AppError {
   }
   if (err instanceof TypeError) {
     if (err.message.startsWith("NetworkError")) {
-      throw new AppError("local", t("error.networkError"), null);
+      throw new AppError("local", "error.networkError", null);
     }
   }
-  throw new AppError("fatal", t("error.unknownError"), null);
+  throw new AppError("fatal", "error.unknownError", null);
 }
 
-function getApiErrorMessage(err: ApiError): string {
+function getApiErrorMessage(err: ApiError): TranslationKey {
   if (err.status === 429) {
-    return t("error.tooManyRequests");
+    return "error.tooManyRequests";
   }
   if (err.status === 401 || err.status === 403) {
-    return t("error.unauthorized");
+    return "error.unauthorized";
   }
   switch (err.message) {
     case "DUPLICATE_MINECRAFT_UUID":
-      return t("panel.users.error.duplicateMinecraftUuid");
+      return "panel.users.error.duplicateMinecraftUuid";
     case "INVALID_MINECRAFT_UUID":
-      return t("panel.users.error.invalidMinecraftUuid");
+      return "panel.users.error.invalidMinecraftUuid";
     case "DEACTIVATE_SELF":
-      return t("panel.users.error.deactivateSelf");
+      return "panel.users.error.deactivateSelf";
     case "DELETE_SELF":
-      return t("panel.users.error.deleteSelf");
+      return "panel.users.error.deleteSelf";
     case "CHANGE_OWN_ROLE":
-      return t("panel.users.error.changeOwnRole");
+      return "panel.users.error.changeOwnRole";
     default:
-      return t("error.unknownError");
+      return "error.unknownError";
   }
 }

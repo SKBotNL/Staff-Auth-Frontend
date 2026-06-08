@@ -1,4 +1,4 @@
-import { t } from "../lib/i18n";
+import type { TranslationKey } from "../contexts/I18nContext";
 import { type ApiError, AppError } from "../types/api";
 import type { ConsentData } from "../types/consent";
 import { BASE_URL, isApiError } from "./api";
@@ -64,19 +64,19 @@ function toAppError(err: unknown): AppError {
   }
   if (err instanceof TypeError) {
     if (err.message.startsWith("NetworkError")) {
-      throw new AppError("local", t("error.networkError"), null);
+      throw new AppError("local", "error.networkError", null);
     }
   }
-  throw new AppError("fatal", t("error.unknownError"), null);
+  throw new AppError("fatal", "error.unknownError", null);
 }
 
-function getApiErrorMessage(err: ApiError): string {
+function getApiErrorMessage(err: ApiError): TranslationKey {
   switch (err.message) {
     case "INVALID_CONSENT_CHALLENGE":
-      return t("consent.error.invalidChallenge");
+      return "consent.error.invalidChallenge";
     case "CONSENT_REQUEST_USED":
-      return t("consent.error.challengeUsed");
+      return "consent.error.challengeUsed";
     default:
-      return t("error.unknownError");
+      return "error.unknownError";
   }
 }

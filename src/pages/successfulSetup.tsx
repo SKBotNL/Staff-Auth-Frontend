@@ -1,7 +1,9 @@
 import CheckIcon from "~icons/mdi/check";
-import { t } from "../lib/i18n";
+import { useI18n } from "../providers/I18nProvider";
 
 export default function SuccessfulSetupPage() {
+  const { t } = useI18n();
+
   return (
     <div class="flex flex-col min-h-screen items-center justify-center">
       <CheckIcon class="h-16 w-full mb-8" />

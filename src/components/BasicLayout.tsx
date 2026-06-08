@@ -1,13 +1,13 @@
-import { type ParentProps, Show } from "solid-js";
-import { dict, t } from "../lib/i18n";
+import type { ParentProps } from "solid-js";
+import { useI18n } from "../providers/I18nProvider";
 import AppErrorBoundary from "./AppErrorBoundary";
 
 export default function BasicLayout(props: ParentProps) {
+  const { t } = useI18n();
+
   return (
-    <Show when={dict()}>
-      <AppErrorBoundary fallbackError={t("error.unknownError")}>
-        {props.children}
-      </AppErrorBoundary>
-    </Show>
+    <AppErrorBoundary fallbackError={t("error.unknownError")}>
+      {props.children}
+    </AppErrorBoundary>
   );
 }

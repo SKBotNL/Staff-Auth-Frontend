@@ -10,15 +10,17 @@ import ConfirmDialog, {
 import Copy from "../../components/Copy";
 import Loader from "../../components/Loader";
 import { throwIfFatal } from "../../lib/error";
-import { t } from "../../lib/i18n";
 import { inviteApi } from "../../lib/invite";
 import { userApi } from "../../lib/user";
+import { useI18n } from "../../providers/I18nProvider";
 import { AppError } from "../../types/api";
 import type { InviteData } from "../../types/invite";
 import { getInvites } from "./invites.data";
 import { getUsers } from "./user/users.data";
 
 function InviteRow(props: { invite: InviteData }) {
+  const { t } = useI18n();
+
   const user = createAsync(() => userApi.get(props.invite.invitedUserId));
   const link = `${window.location.origin}/setup?token=${props.invite.token}`;
 
@@ -45,7 +47,7 @@ function InviteRow(props: { invite: InviteData }) {
         setFatalError(err);
         return null;
       }
-      return err.message;
+      return t(err.message);
     } finally {
       setModifying(false);
     }
@@ -71,7 +73,7 @@ function InviteRow(props: { invite: InviteData }) {
                   <img
                     class="rounded h-12 w-12 hidden md:block"
                     src={`https://minotar.net/helm/${user()?.minecraftUuid.replaceAll("-", "")}.png`}
-                    alt={`${username()}'s head`}
+                    alt={`${username()}’s ${t("panel.picture")}`}
                   />
                   <div class="font-bold">{username()}</div>
                 </>
@@ -112,6 +114,8 @@ function InviteRow(props: { invite: InviteData }) {
 }
 
 function Invites() {
+  const { t } = useI18n();
+
   const invites = createAsync(() => getInvites());
 
   return (
@@ -135,6 +139,8 @@ function Invites() {
 }
 
 export default function InvitesPage() {
+  const { t } = useI18n();
+
   const users = createAsync(() => getUsers());
   const [loading, setUpdating] = createSignal(false);
   const [error, setError] = createSignal<string | null>(null);
@@ -161,7 +167,7 @@ export default function InvitesPage() {
         setFatalError(err);
         return;
       }
-      setError(err.message);
+      setError(t(err.message));
       return;
     } finally {
       setUpdating(false);

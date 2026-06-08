@@ -1,13 +1,15 @@
 import { createSignal, onMount } from "solid-js";
 import { throwIfFatal } from "../../lib/error";
-import { t } from "../../lib/i18n";
 import { loginApi } from "../../lib/login";
+import { useI18n } from "../../providers/I18nProvider";
 import { AppError } from "../../types/api";
 
 export default function MinecraftCheckComponent(props: {
   loginChallenge: string;
   done: () => void;
 }) {
+  const { t } = useI18n();
+
   const [error, setError] = createSignal<string | null>(null);
   const [fatalError, setFatalError] = createSignal<Error | null>(null);
 
@@ -24,11 +26,11 @@ export default function MinecraftCheckComponent(props: {
         setFatalError(err);
         return;
       }
-      setError(err.message);
+      setError(t(err.message));
       return;
     }
     if (!valid) {
-      setError("Check failed");
+      setError(t("minecraftCheck.error.differentIp"));
       return;
     }
     props.done();

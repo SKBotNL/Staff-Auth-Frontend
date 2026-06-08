@@ -8,8 +8,8 @@ import {
   Suspense,
 } from "solid-js";
 import CloseIcon from "~icons/mdi/close";
-import { t } from "../lib/i18n";
 import { userApi } from "../lib/user";
+import { useI18n } from "../providers/I18nProvider";
 import { AppError } from "../types/api";
 import type { Role } from "../types/user";
 import Loader from "./Loader";
@@ -21,6 +21,8 @@ function UserDialog(props: {
   reset: (r: () => void) => void;
   onFatalError: (error: Error) => void;
 }) {
+  const { t } = useI18n();
+
   const [loading, setLoading] = createSignal(false);
   const [error, setError] = createSignal<string | null>(null);
   const [email, setEmail] = createSignal<string>("");
@@ -68,7 +70,7 @@ function UserDialog(props: {
         props.onFatalError(err);
         return false;
       }
-      setError(err.message);
+      setError(t(err.message));
       return false;
     } finally {
       setLoading(false);
@@ -182,6 +184,8 @@ export default function UserDialogComponent(props: {
   ref: (r: UserDialogRef) => void;
   onFatalError: (error: Error) => void;
 }) {
+  const { t } = useI18n();
+
   const [userId, setUserId] = createSignal<number | null>(null);
 
   let dialogRef!: HTMLDialogElement;

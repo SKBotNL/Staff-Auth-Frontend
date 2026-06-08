@@ -1,12 +1,14 @@
 import { ErrorBoundary, type ParentProps } from "solid-js";
 import { LOGIN_URL } from "../lib/api";
-import { t } from "../lib/i18n";
+import { useI18n } from "../providers/I18nProvider";
 import { AppError, NeedToLoginError } from "../types/api";
 import ErrorComponent from "./ErrorComponent";
 
 export default function AppErrorBoundaryComponent(
   props: ParentProps<{ fallbackError: string }>,
 ) {
+  const { t } = useI18n();
+
   return (
     <ErrorBoundary
       fallback={(e, reset) => {
@@ -21,7 +23,7 @@ export default function AppErrorBoundaryComponent(
           if (e.message === t("error.unknownError")) {
             text = props.fallbackError;
           } else {
-            text = e.message;
+            text = t(e.message);
           }
           canReset = e.kind !== "fatal";
         } else {

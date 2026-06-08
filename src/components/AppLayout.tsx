@@ -16,12 +16,14 @@ import LogOutIcon from "~icons/mdi/logout";
 import MenuIcon from "~icons/mdi/menu";
 import { BASE_URL } from "../lib/api";
 import { throwIfFatal } from "../lib/error";
-import { dict, t } from "../lib/i18n";
+import { useI18n } from "../providers/I18nProvider";
 import { useUser } from "../store/user";
 import AppErrorBoundary from "./AppErrorBoundary";
 import Loader from "./Loader";
 
 function App(props: ParentProps) {
+  const { t } = useI18n();
+
   const { user } = useUser();
   const [isDrawerOpen, setDrawerOpen] = createSignal(false);
   const toggleDrawer = () => {
@@ -112,7 +114,7 @@ function App(props: ParentProps) {
                   >
                     <img
                       src={u().picture}
-                      alt={u().name}
+                      alt={`${u().name}’s ${t("panel.picture")}`}
                       class="w-6 h-6 rounded"
                     ></img>
                     <span class="truncate">{u().name}</span>
@@ -145,15 +147,15 @@ function App(props: ParentProps) {
 }
 
 export default function AppLayout(props: ParentProps) {
+  const { t } = useI18n();
+
   return (
-    <Show when={dict()}>
-      <AppErrorBoundary fallbackError={t("error.unknownError")}>
-        <Suspense
-          fallback={<Loader text={t("panel.loading")} fillScreen={true} />}
-        >
-          <App {...props} />
-        </Suspense>
-      </AppErrorBoundary>
-    </Show>
+    <AppErrorBoundary fallbackError={t("error.unknownError")}>
+      <Suspense
+        fallback={<Loader text={t("panel.loading")} fillScreen={true} />}
+      >
+        <App {...props} />
+      </Suspense>
+    </AppErrorBoundary>
   );
 }
