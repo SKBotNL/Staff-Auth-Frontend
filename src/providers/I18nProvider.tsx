@@ -1,6 +1,7 @@
 import * as i18n from "@solid-primitives/i18n";
 import { createAsync } from "@solidjs/router";
-import { createSignal, type ParentProps, useContext } from "solid-js";
+import { createSignal, type ParentProps, Show, useContext } from "solid-js";
+import Loader from "../components/Loader";
 import {
   type Dictionary,
   fetchDictionary,
@@ -20,7 +21,12 @@ export function I18nProvider(props: ParentProps) {
     <I18nContext.Provider
       value={{ locale, setLocale: (l: Locale) => setLocale(l), t }}
     >
-      {props.children}
+      <Show
+        when={dict()}
+        fallback={<Loader text={undefined} fillScreen={true} />}
+      >
+        {props.children}
+      </Show>
     </I18nContext.Provider>
   );
 }
