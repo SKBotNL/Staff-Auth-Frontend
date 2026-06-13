@@ -1,5 +1,5 @@
 import type { TranslationKey } from "../contexts/I18nContext";
-import { type ApiError, AppError } from "../types/api";
+import { type ApiError, AppError, ErrorData } from "../types/api";
 import type { CreateInviteData, InviteData } from "../types/invite";
 import { BASE_URL, isApiError, LOGIN_URL } from "./api";
 
@@ -15,7 +15,7 @@ export const inviteApi = {
       }
       throw toAppError({
         status: response.status,
-        message: await response.text(),
+        errorData: (await response.json()) as ErrorData,
       });
     }
     return await response.json();
@@ -32,7 +32,7 @@ export const inviteApi = {
       }
       throw toAppError({
         status: response.status,
-        message: await response.text(),
+        errorData: (await response.json()) as ErrorData,
       });
     }
     return await response.json();
@@ -57,7 +57,7 @@ export const inviteApi = {
       }
       throw toAppError({
         status: response.status,
-        message: await response.text(),
+        errorData: (await response.json()) as ErrorData,
       });
     }
     return await response.json();
@@ -106,7 +106,7 @@ function getApiErrorMessage(err: ApiError): TranslationKey {
   if (err.status === 401 || err.status === 403) {
     return "error.unauthorized";
   }
-  switch (err.message) {
+  switch (err.errorData.message) {
     case "USER_ALREADY_SET_UP":
       return "panel.invites.error.userAlreadySetUp";
     case "DUPLICATE_INVITE":

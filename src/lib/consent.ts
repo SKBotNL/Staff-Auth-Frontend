@@ -1,5 +1,5 @@
 import type { TranslationKey } from "../contexts/I18nContext";
-import { type ApiError, AppError } from "../types/api";
+import { type ApiError, AppError, ErrorData } from "../types/api";
 import type { ConsentData } from "../types/consent";
 import { BASE_URL, isApiError } from "./api";
 
@@ -17,7 +17,7 @@ export const consentApi = {
     if (!response.ok)
       throw toAppError({
         status: response.status,
-        message: await response.text(),
+        errorData: (await response.json()) as ErrorData,
       });
     return await response.json();
   },
@@ -46,7 +46,7 @@ export const consentApi = {
     if (!response.ok)
       throw toAppError({
         status: response.status,
-        message: await response.text(),
+        errorData: (await response.json()) as ErrorData,
       });
     return await response.text();
   },
@@ -57,7 +57,7 @@ const fatal = ["INVALID_CONSENT_CHALLENGE", "CONSENT_REQUEST_USED"];
 function toAppError(err: unknown): AppError {
   if (isApiError(err)) {
     throw new AppError(
-      fatal.includes(err.message) ? "fatal" : "local",
+      fatal.includes(err.errorData.message) ? "fatal" : "local",
       getApiErrorMessage(err),
       err.status,
     );
@@ -71,7 +71,7 @@ function toAppError(err: unknown): AppError {
 }
 
 function getApiErrorMessage(err: ApiError): TranslationKey {
-  switch (err.message) {
+  switch (err.errorData.message) {
     case "INVALID_CONSENT_CHALLENGE":
       return "consent.error.invalidChallenge";
     case "CONSENT_REQUEST_USED":

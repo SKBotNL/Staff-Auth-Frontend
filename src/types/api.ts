@@ -7,7 +7,10 @@ export type MeData = {
   roles: string[];
 };
 
-export type ApiError = { message: string; status: number };
+export type ErrorData = { message: string };
+export type RedirectErrorData = ErrorData & { redirectUrl: string };
+
+export type ApiError = { errorData: ErrorData; status: number };
 
 export class AppError extends Error {
   kind: "fatal" | "local";

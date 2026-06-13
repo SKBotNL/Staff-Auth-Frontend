@@ -2,6 +2,8 @@ export const dict = {
   login: {
     continue: "Continue",
     loading: "Loading login…",
+    failure: "Failed to log in",
+    tryAgain: "Try again",
     credentials: {
       title: "Login",
       username: "Username",
@@ -13,8 +15,11 @@ export const dict = {
     rememberMe: "Remember me",
     error: {
       noChallenge: "No login challenge was provided",
-      invalidChallenge: "An invalid login challenge was provided",
+      invalidChallenge: "Invalid login challenge",
       challengeUsed: "This login challenge has already been used",
+      differentIp:
+        "You are trying to log in using a different IP. Sending you back…",
+      unrecoverable: "An unrecoverable error has occured. Sending you back…",
     },
   },
   totp: {

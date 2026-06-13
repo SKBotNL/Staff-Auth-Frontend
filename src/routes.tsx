@@ -1,8 +1,8 @@
 import type { RouteDefinition } from "@solidjs/router";
 import { lazy } from "solid-js";
 
-import AppLayout from "./components/AppLayout";
-import BasicLayout from "./components/BasicLayout";
+const AppLayout = lazy(() => import("./components/AppLayout"));
+const BasicLayout = lazy(() => import("./components/BasicLayout"));
 import { preloadInvites } from "./pages/panel/invites.data";
 // import { preloadUser } from "./pages/user/user.data";
 import { preloadUsers } from "./pages/panel/user/users.data";
@@ -79,6 +79,10 @@ export const routes: RouteDefinition[] = [
   {
     path: "/logged-out",
     component: lazy(() => import("./pages/loggedOut")),
+  },
+  {
+    path: "/login-failure",
+    component: lazy(() => import("./pages/loginFailure")),
   },
   {
     path: "**",

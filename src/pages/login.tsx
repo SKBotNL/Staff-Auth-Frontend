@@ -24,7 +24,7 @@ export default function LoginPage() {
     const data = loginData();
     if (!data) return;
     if (data.skip) {
-      window.location.href = data.redirectUri as string;
+      window.location.href = data.redirectUrl as string;
     }
   });
 

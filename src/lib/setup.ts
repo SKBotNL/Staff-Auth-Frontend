@@ -1,5 +1,5 @@
 import type { TranslationKey } from "../contexts/I18nContext";
-import { type ApiError, AppError } from "../types/api";
+import { type ApiError, AppError, ErrorData } from "../types/api";
 import type { SetupStage, TotpData } from "../types/setup";
 import { BASE_URL, isApiError } from "./api";
 
@@ -17,7 +17,7 @@ export const setupApi = {
     if (!response.ok)
       throw toAppError({
         status: response.status,
-        message: await response.text(),
+        errorData: (await response.json()) as ErrorData,
       });
     const stage = getStage(await response.text());
     if (stage instanceof AppError) throw stage;
@@ -45,7 +45,7 @@ export const setupApi = {
     if (!response.ok)
       throw toAppError({
         status: response.status,
-        message: await response.text(),
+        errorData: (await response.json()) as ErrorData,
       });
   },
 
@@ -64,7 +64,7 @@ export const setupApi = {
     if (!response.ok)
       throw toAppError({
         status: response.status,
-        message: await response.text(),
+        errorData: (await response.json()) as ErrorData,
       });
     return (await response.text()) === "true";
   },
@@ -84,7 +84,7 @@ export const setupApi = {
     if (!response.ok)
       throw toAppError({
         status: response.status,
-        message: await response.text(),
+        errorData: (await response.json()) as ErrorData,
       });
     return await response.json();
   },
@@ -104,7 +104,7 @@ export const setupApi = {
     if (!response.ok)
       throw toAppError({
         status: response.status,
-        message: await response.text(),
+        errorData: (await response.json()) as ErrorData,
       });
   },
 };
@@ -114,7 +114,7 @@ const fatal = ["INVALID_INVITE", "DEACTIVATED"];
 function toAppError(err: unknown): AppError {
   if (isApiError(err)) {
     return new AppError(
-      fatal.includes(err.message) ? "fatal" : "local",
+      fatal.includes(err.errorData.message) ? "fatal" : "local",
       getApiErrorMessage(err),
       err.status,
     );
@@ -131,7 +131,7 @@ function getApiErrorMessage(err: ApiError): TranslationKey {
   if (err.status === 429) {
     return "error.tooManyRequests";
   }
-  switch (err.message) {
+  switch (err.errorData.message) {
     case "MINECRAFT_CHECK_TIMEOUT":
       return "minecraftCheck.error.timeout";
     case "MINECRAFT_CHECK_UNAVAILABLE":

@@ -1,5 +1,10 @@
 import type { TranslationKey } from "../contexts/I18nContext";
-import { type ApiError, AppError } from "../types/api";
+import {
+  type ApiError,
+  AppError,
+  ErrorData,
+  RedirectErrorData,
+} from "../types/api";
 import type { LoginData, LoginStage } from "../types/login";
 import { BASE_URL, isApiError } from "./api";
 
@@ -14,11 +19,12 @@ export const loginApi = {
       throw toAppError(err);
     }
 
-    if (!response.ok)
+    if (!response.ok) {
       throw toAppError({
         status: response.status,
-        message: await response.text(),
+        errorData: (await response.json()) as ErrorData,
       });
+    }
     return await response.json();
   },
 
@@ -46,7 +52,7 @@ export const loginApi = {
     if (!response.ok)
       throw toAppError({
         status: response.status,
-        message: await response.text(),
+        errorData: (await response.json()) as ErrorData,
       });
   },
 
@@ -65,7 +71,7 @@ export const loginApi = {
     if (!response.ok)
       throw toAppError({
         status: response.status,
-        message: await response.text(),
+        errorData: (await response.json()) as ErrorData,
       });
     return (await response.text()) === "true";
   },
@@ -96,7 +102,7 @@ export const loginApi = {
     if (!response.ok)
       throw toAppError({
         status: response.status,
-        message: await response.text(),
+        errorData: (await response.json()) as ErrorData,
       });
     return await response.text();
   },
@@ -107,7 +113,7 @@ const fatal = ["INVALID_LOGIN_CHALLENGE", "LOGIN_REQUEST_USED"];
 function toAppError(err: unknown): AppError {
   if (isApiError(err)) {
     return new AppError(
-      fatal.includes(err.message) ? "fatal" : "local",
+      fatal.includes(err.errorData.message) ? "fatal" : "local",
       getApiErrorMessage(err),
       err.status,
     );
@@ -124,7 +130,7 @@ function getApiErrorMessage(err: ApiError): TranslationKey {
   if (err.status === 429) {
     return "error.tooManyRequests";
   }
-  switch (err.message) {
+  switch (err.errorData.message) {
     case "INCORRECT_USERNAME_OR_PASSWORD":
       return "login.credentials.error.incorrectUsernameOrPassword";
     case "MINECRAFT_CHECK_TIMEOUT":
@@ -137,6 +143,12 @@ function getApiErrorMessage(err: ApiError): TranslationKey {
       return "login.error.invalidChallenge";
     case "LOGIN_REQUEST_USED":
       return "login.error.challengeUsed";
+    case "DIFFERENT_IP":
+      window.location.href = (err.errorData as RedirectErrorData).redirectUrl;
+      return "login.error.differentIp";
+    case "UNRECOVERABLE":
+      window.location.href = (err.errorData as RedirectErrorData).redirectUrl;
+      return "login.error.unrecoverable";
     default:
       return "error.unknownError";
   }

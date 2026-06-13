@@ -2,6 +2,7 @@ import type { TranslationKey } from "../contexts/I18nContext";
 import {
   type ApiError,
   AppError,
+  ErrorData,
   type MeData,
   NeedToLoginError,
 } from "../types/api";
@@ -22,7 +23,7 @@ export const api = {
 
       throw toAppError({
         status: response.status,
-        message: await response.text(),
+        errorData: (await response.json()) as ErrorData,
       });
     }
     return await response.json();
@@ -40,7 +41,7 @@ function getApiErrorMessage(err: ApiError): TranslationKey {
   if (err.status === 429) {
     return "error.tooManyRequests";
   }
-  switch (err.message) {
+  switch (err.errorData.message) {
     default:
       return "error.unknownError";
   }
@@ -51,6 +52,6 @@ export function isApiError(err: unknown): err is ApiError {
     typeof err === "object" &&
     err !== null &&
     "status" in err &&
-    "message" in err
+    "errorData" in err
   );
 }

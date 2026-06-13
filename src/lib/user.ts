@@ -1,5 +1,5 @@
 import type { TranslationKey } from "../contexts/I18nContext";
-import { type ApiError, AppError } from "../types/api";
+import { type ApiError, AppError, ErrorData } from "../types/api";
 import type { CreateUserData, UpdateUserData, UserData } from "../types/user";
 import { BASE_URL, isApiError, LOGIN_URL } from "./api";
 
@@ -15,7 +15,7 @@ export const userApi = {
       }
       throw toAppError({
         status: response.status,
-        message: await response.text(),
+        errorData: (await response.json()) as ErrorData,
       });
     }
     return await response.json();
@@ -32,7 +32,7 @@ export const userApi = {
       }
       throw toAppError({
         status: response.status,
-        message: await response.text(),
+        errorData: (await response.json()) as ErrorData,
       });
     }
     return await response.json();
@@ -57,7 +57,7 @@ export const userApi = {
       }
       throw toAppError({
         status: response.status,
-        message: await response.text(),
+        errorData: (await response.json()) as ErrorData,
       });
     }
     return await response.json();
@@ -82,7 +82,7 @@ export const userApi = {
       }
       throw toAppError({
         status: response.status,
-        message: await response.text(),
+        errorData: (await response.json()) as ErrorData,
       });
     }
     return await response.json();
@@ -108,7 +108,7 @@ export const userApi = {
       }
       throw toAppError({
         status: response.status,
-        message: await response.text(),
+        errorData: (await response.json()) as ErrorData,
       });
     }
   },
@@ -133,7 +133,7 @@ function getApiErrorMessage(err: ApiError): TranslationKey {
   if (err.status === 401 || err.status === 403) {
     return "error.unauthorized";
   }
-  switch (err.message) {
+  switch (err.errorData.message) {
     case "DUPLICATE_MINECRAFT_UUID":
       return "panel.users.error.duplicateMinecraftUuid";
     case "INVALID_MINECRAFT_UUID":

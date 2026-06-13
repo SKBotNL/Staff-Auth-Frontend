@@ -1,6 +1,6 @@
 export type LoginData = {
   skip: boolean;
-  redirectUri?: string;
+  redirectUrl?: string;
   currentStage?: string;
 };
 
