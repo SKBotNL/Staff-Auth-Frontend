@@ -3,6 +3,7 @@ import { lazy } from "solid-js";
 
 const AppLayout = lazy(() => import("./components/AppLayout"));
 const BasicLayout = lazy(() => import("./components/BasicLayout"));
+
 import { preloadInvites } from "./pages/panel/invites.data";
 // import { preloadUser } from "./pages/user/user.data";
 import { preloadUsers } from "./pages/panel/user/users.data";

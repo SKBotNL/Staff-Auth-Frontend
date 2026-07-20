@@ -2,8 +2,8 @@ import type { TranslationKey } from "../contexts/I18nContext";
 import {
   type ApiError,
   AppError,
-  ErrorData,
-  RedirectErrorData,
+  type ErrorData,
+  type RedirectErrorData,
 } from "../types/api";
 import type { LoginData, LoginStage } from "../types/login";
 import { BASE_URL, isApiError } from "./api";

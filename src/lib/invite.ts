@@ -1,5 +1,5 @@
 import type { TranslationKey } from "../contexts/I18nContext";
-import { type ApiError, AppError, ErrorData } from "../types/api";
+import { type ApiError, AppError, type ErrorData } from "../types/api";
 import type { CreateInviteData, InviteData } from "../types/invite";
 import { BASE_URL, isApiError, LOGIN_URL } from "./api";
 

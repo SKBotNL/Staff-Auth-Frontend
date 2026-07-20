@@ -2,7 +2,7 @@ import type { TranslationKey } from "../contexts/I18nContext";
 import {
   type ApiError,
   AppError,
-  ErrorData,
+  type ErrorData,
   type MeData,
   NeedToLoginError,
 } from "../types/api";
