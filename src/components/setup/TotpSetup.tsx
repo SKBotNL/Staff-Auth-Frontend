@@ -5,6 +5,7 @@ import { setupApi } from "../../lib/setup";
 import { useI18n } from "../../providers/I18nProvider";
 import { AppError } from "../../types/api";
 import Loader from "../Loader";
+import Copy from "../Copy";
 
 function TotpSetup(props: { token: string }) {
   const { t } = useI18n();
@@ -50,7 +51,10 @@ function TotpSetup(props: { token: string }) {
         <div class="collapse-title font-semibold">
           {t("setup.totpSetup.showSecret")}
         </div>
-        <div class="collapse-content text-sm">{totpData()?.secret}</div>
+        <div class="collapse-content text-sm flex flex-row items-center gap-2">
+          <span class="truncate">{totpData()?.secret}</span>
+          <Copy textToCopy={totpData()?.secret ?? ""} />
+        </div>
       </div>
       <form
         class="w-full"
