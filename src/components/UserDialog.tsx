@@ -29,27 +29,27 @@ function UserDialog(props: {
   const [minecraftUuid, setMinecraftUuid] = createSignal<string>("");
   const [role, setRole] = createSignal<Role>();
 
-  const [user] = createResource(props.userId, (id) => {
+  const [user, { refetch }] = createResource(props.userId, (id) => {
     return userApi.get(id.toString());
   });
 
   let fieldSet!: HTMLFieldSetElement;
   props.reset(() => {
-    if (props.userId()) return;
+    if (props.userId()) {
+      refetch();
+    }
     setEmail("");
     setMinecraftUuid("");
     setRole();
     fieldSet.form?.reset();
   });
 
-  createEffect(async () => {
-    setEmail(user()?.email ?? "");
-    setMinecraftUuid(user()?.minecraftUuid ?? "");
-    setRole(user()?.role);
-  });
-
-  createEffect(async () => {
-    if (!props.userId()) {
+  createEffect(() => {
+    if (props.userId()) {
+      setEmail(user()?.email ?? "");
+      setMinecraftUuid(user()?.minecraftUuid ?? "");
+      setRole(user()?.role);
+    } else {
       setEmail("");
       setMinecraftUuid("");
       setRole();
