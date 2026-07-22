@@ -123,7 +123,7 @@ function UserDialog(props: {
         onSubmit={async (e) => {
           e.preventDefault();
           const success = props.userId() ? await update() : await create();
-          if (success) close();
+          if (success) props.close();
         }}
       >
         <fieldset ref={fieldSet} class="fieldset">
