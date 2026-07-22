@@ -1,4 +1,4 @@
-import type { RouteDefinition } from "@solidjs/router";
+import type { RouteDefinition, RouteSectionProps } from "@solidjs/router";
 import { lazy } from "solid-js";
 
 const AppLayout = lazy(() => import("./components/AppLayout"));
@@ -18,7 +18,9 @@ import ResetAccount from "./pages/resetAccount";
 export const routes: RouteDefinition[] = [
   {
     path: "/",
-    component: (props) => <AppLayout>{props.children}</AppLayout>,
+    component: (props: RouteSectionProps) => (
+      <AppLayout>{props.children}</AppLayout>
+    ),
     children: [
       {
         path: "/",
