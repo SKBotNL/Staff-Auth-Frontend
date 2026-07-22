@@ -102,7 +102,7 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
             <For each={users()}>
               {(user) => (
                 <tr class={user.deactivated ? "opacity-80" : ""}>
-                  <td>
+                  <td class="whitespace-nowrap">
                     <div class="flex items-center gap-3">
                       <Show
                         when={user.username}
@@ -125,13 +125,15 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
                       </Show>
                     </div>
                   </td>
-                  <td>{user.email}</td>
-                  <td>{user.minecraftUuid}</td>
-                  <td>
+                  <td class="whitespace-nowrap">{user.email}</td>
+                  <td class="whitespace-nowrap">{user.minecraftUuid}</td>
+                  <td class="whitespace-nowrap">
                     {user.role[0].toUpperCase() +
                       user.role.slice(1).toLowerCase()}
                   </td>
-                  <td>{user.setUp ? t("panel.yes") : t("panel.no")}</td>
+                  <td class="whitespace-nowrap">
+                    {user.setUp ? t("panel.yes") : t("panel.no")}
+                  </td>
                   <td class="whitespace-nowrap flex flex-row gap-1">
                     <div class="tooltip" data-tip={t("panel.users.edit")}>
                       <button
