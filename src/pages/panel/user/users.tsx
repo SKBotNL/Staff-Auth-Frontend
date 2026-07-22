@@ -115,11 +115,11 @@ function Users(props: { userDialogRef: UserDialogRef | undefined }) {
                         {(username) => (
                           <>
                             <img
-                              class={`rounded h-12 w-12 hidden md:block${user.deactivated ? " grayscale" : ""}`}
+                              class={`rounded h-12 w-12 shrink-0 hidden md:block${user.deactivated ? " grayscale" : ""}`}
                               src={`https://minotar.net/helm/${user.minecraftUuid.replaceAll("-", "")}.png`}
                               alt={`${username()}’s ${t("panel.picture")}`}
                             />
-                            <div class="font-bold">{username()}</div>
+                            <span class="font-bold">{username()}</span>
                           </>
                         )}
                       </Show>
