@@ -1,6 +1,7 @@
 import { ErrorBoundary, type ParentProps } from "solid-js";
 import { LOGIN_URL } from "../lib/api";
 import { useI18n } from "../providers/I18nProvider";
+import { useUser } from "../store/user";
 import { AppError, NeedToLoginError } from "../types/api";
 import ErrorComponent from "./ErrorComponent";
 
@@ -8,6 +9,8 @@ export default function AppErrorBoundaryComponent(
   props: ParentProps<{ fallbackError: string }>,
 ) {
   const { t } = useI18n();
+
+  const { user, refetch: refetchUser } = useUser();
 
   return (
     <ErrorBoundary
@@ -34,7 +37,14 @@ export default function AppErrorBoundaryComponent(
           <ErrorComponent
             text={text}
             fillScreen={true}
-            reset={canReset ? reset : undefined}
+            reset={
+              canReset
+                ? () => {
+                    if (user.state === "errored") refetchUser();
+                    reset();
+                  }
+                : undefined
+            }
           />
         );
       }}
