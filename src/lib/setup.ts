@@ -5,7 +5,7 @@ import { BASE_URL, isApiError } from "./api";
 
 export const setupApi = {
   currentStage: async (token: string): Promise<SetupStage> => {
-    const url = new URL("/setup/currentStage", BASE_URL);
+    const url = new URL("/setup/current-stage", BASE_URL);
     url.searchParams.set("token", token);
     let response: Response;
     try {
@@ -52,7 +52,7 @@ export const setupApi = {
   minecraftCheck: async (token: string): Promise<boolean> => {
     let response: Response;
     try {
-      response = await fetch(`${BASE_URL}/setup/minecraftcheck`, {
+      response = await fetch(`${BASE_URL}/setup/minecraft-check`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token }),
@@ -72,7 +72,7 @@ export const setupApi = {
   totpSetup: async (token: string): Promise<TotpData> => {
     let response: Response;
     try {
-      response = await fetch(`${BASE_URL}/setup/totpsetup`, {
+      response = await fetch(`${BASE_URL}/setup/totp-setup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token }),
@@ -92,7 +92,7 @@ export const setupApi = {
   totpVerify: async (code: string, token: string) => {
     let response: Response;
     try {
-      response = await fetch(`${BASE_URL}/setup/totpverify`, {
+      response = await fetch(`${BASE_URL}/setup/totp-verify`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code, token }),
