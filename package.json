@@ -12,11 +12,11 @@
   "license": "MIT",
   "devDependencies": {
     "@biomejs/biome": "^2.5.5",
-    "@iconify/json": "^2.2.504",
+    "@iconify/json": "^2.2.505",
     "@tailwindcss/postcss": "^4.3.3",
     "baseline-browser-mapping": "^2.11.1",
     "daisyui": "^5.7.0",
-    "postcss": "^8.5.22",
+    "postcss": "^8.5.23",
     "solid-devtools": "^0.34.5",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
