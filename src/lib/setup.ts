@@ -155,8 +155,6 @@ function getStage(stage: string): SetupStage {
       return { type: "minecraftCheck" };
     case "TOTP":
       return { type: "totp" };
-    case "TOTP_VERIFY":
-      return { type: "totpVerify" };
     case "FINALIZE":
       throw new AppError("fatal", "setup.error.finalized", null);
     default:
