@@ -34,6 +34,7 @@ export const dict = {
   minecraftCheck: {
     title: "Minecraft Check",
     logIn: "Please log in…",
+    timeRemaining: "{{ seconds }}s remaining",
     error: {
       timeout: "You took too long to log in",
       unavailable: "The Minecraft check is currently unavailable",
